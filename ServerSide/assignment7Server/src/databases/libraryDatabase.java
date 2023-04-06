@@ -1,4 +1,4 @@
-package Databases;
+package databases;
 
 import org.bson.BsonDocument;
 import org.bson.BsonInt64;
@@ -12,20 +12,20 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.MongoException;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.Filters;
-public class libDB {
+public class libraryDatabase {
     private static MongoClient mongo;
     private static MongoDatabase database;
     private static MongoCollection<Document> collection;
     private static final String URI = "mongodb+srv://jd52753:422cassignment7@library.b1aiqgy.mongodb.net/?retryWrites=true&w=majority";
     private static final String DB = "library"; // test
     private static final String COLLECTION = "books"; // test
-    public libDB(){
+    public libraryDatabase(){
         mongo = MongoClients.create(URI);
         database = mongo.getDatabase(DB);
         collection = database.getCollection(COLLECTION);
 //        ping();
-        findAndRead();
-//        update();
+//        findAndRead();
+        update();
         mongo.close();
     }
     public static void update() {

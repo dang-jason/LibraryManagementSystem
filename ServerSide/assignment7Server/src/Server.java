@@ -1,5 +1,6 @@
+import databases.libraryDatabase;
 public class Server {
     public static void main(String[] args) {
-       libDB db = new libDB();
+       libraryDatabase db = new libraryDatabase();
     }
 }
