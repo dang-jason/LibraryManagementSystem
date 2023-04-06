@@ -1,2 +1,4 @@
-package data;public class book {
+package data;
+
+public class book {
 }
