@@ -9,7 +9,7 @@ import java.util.Observable;
 
 public class Server extends Observable {
     private ServerSocket serverSocket;
-    private static int port = 4242;
+    private static int port = 4243;
 
     public Server(ServerSocket serverSocket){this.serverSocket = serverSocket;}
     public static void main(String[] args) {

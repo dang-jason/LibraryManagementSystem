@@ -33,27 +33,30 @@ class ClientHandler implements Runnable, Observer {
     protected void sendToClient(Item item) {
         System.out.println("Sending to client: " + item);
         try {
-//            toClient.writeUTF(new Gson().toJson(item));
-//            toClient.flush();
+            toClient.reset();
+            toClient.writeUnshared(item);
+            toClient.flush();
             System.out.println("Item has been sent to client");
         }catch(Exception e){
             e.printStackTrace();
-            System.out.println("Failed to send to client");
+            System.out.println("Error in sending to client");
         }
     }
 
     @Override
     public void run() {
-        Item input = null;
+        Item input;
         while(socket.isConnected()){
             try{
                 //need to fix read from server if nothing to read
-                input = (Item) fromClient.readObject();
-                System.out.println(input);
+                while((input = (Item) fromClient.readObject()) != null) {
+                    System.out.println("Item received from client" + input);
+                }
             } catch(IOException | ClassNotFoundException e){
-                e.printStackTrace();
+                System.err.println("Error in receiving item from client");
+//                e.printStackTrace();
                 closeEverything(this.socket, this.fromClient, this.toClient);
-                break;
+//                break;
             }
         }
     }
