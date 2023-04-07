@@ -8,7 +8,7 @@ public class Item implements Serializable{
     protected int pages;
     protected String summary;
 
-    protected Item(){
+    public Item(){
         this.itemType = "";
         this.title = "";
         this.author = "";
@@ -16,13 +16,24 @@ public class Item implements Serializable{
         this.summary = "";
         System.out.println("empty item created");
     }
-    protected Item(String itemType, String title, String author, int pages, String summary){
+    public Item(String itemType, String title, String author, int pages, String summary){
         this.itemType = itemType;
         this.title = title;
         this.author = author;
         this.pages = pages;
         this.summary = summary;
         System.out.println("Item values created");
+    }
+
+    @Override
+    public String toString() {
+        return "Item{" +
+                "itemType='" + itemType + '\'' +
+                ", title='" + title + '\'' +
+                ", author='" + author + '\'' +
+                ", pages=" + pages +
+                ", summary='" + summary + '\'' +
+                '}';
     }
 
     public String getItemType() {
