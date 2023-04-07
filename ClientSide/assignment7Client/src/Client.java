@@ -9,7 +9,7 @@ import java.net.Socket;
 
 public class Client {
     private static String host = "127.0.0.1";
-    private static int port = 4242;
+    private static int port = 4243;
     private ObjectInputStream fromServer;
     private ObjectOutputStream toServer;
     private Socket socket;
@@ -28,19 +28,9 @@ public class Client {
         Item itemToSend = new Item("Book", "Cant hurt me", "David Goggins", 363, "His Life");
         sendToServer(itemToSend);
 //        readFromServer();
-        //need to fix read from server
-        try {
-            System.out.println("IN HERE");
-            while(fromServer.available() > 0) {
-                Item itemFromServer = (Item) fromServer.readObject();
-                System.out.println(itemFromServer);
-            }
-        } catch (IOException | ClassNotFoundException e) {
-            closeEverything(socket, fromServer, toServer);
-            e.printStackTrace();
-            System.out.println("Error in reading from server");
-        }
+        while(true){}
     }
+
     public void readFromServer(){
         new Thread(new Runnable(){
             @Override
@@ -48,13 +38,12 @@ public class Client {
                 Item itemFromServer;
                 while(socket.isConnected()){
                     try {
-                        while(fromServer.available() > 0) {
-                            itemFromServer = (Item) fromServer.readObject();
-                            System.out.println(itemFromServer);
+                        while((itemFromServer = (Item) fromServer.readObject()) != null) {
+                            System.out.println("Item received from server:" + itemFromServer);
                         }
                     } catch (IOException | ClassNotFoundException e) {
+                        System.out.println("Error in receiving item from server");
                         closeEverything(socket, fromServer, toServer);
-                        System.out.println("Error in reading from server");
                     }
                 }
             }
@@ -63,16 +52,17 @@ public class Client {
     public void sendToServer(Item item) {
         System.out.println("Sending to server: " + item);
         try {
-            while(socket.isConnected()){
-                toServer.writeObject(item); // later replace when have gui
+//            while(socket.isConnected()){
+                toServer.reset();
+                toServer.writeUnshared(item); // later replace when have gui
                 toServer.flush();
-                socket.close();
+//                socket.close();
                 System.out.println("Item has been sent to server");
-                break;
-            }
+//                break; // might not need to break here if reading inputs?
+//            }
         }catch(Exception e){
-            closeEverything(socket, fromServer, toServer);
             System.out.println("Error in sending to server");
+            closeEverything(socket, fromServer, toServer);
         }
     }
 
