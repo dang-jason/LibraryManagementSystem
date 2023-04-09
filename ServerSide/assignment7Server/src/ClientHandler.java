@@ -46,7 +46,7 @@ class ClientHandler implements Runnable, Observer {
     @Override
     public void run() {
         Item input;
-        while(socket.isConnected()){
+        while(!socket.isClosed()){
             try{
                 //need to fix read from server if nothing to read
                 while((input = (Item) fromClient.readObject()) != null) {
@@ -56,7 +56,6 @@ class ClientHandler implements Runnable, Observer {
                 System.err.println("Error in receiving item from client");
 //                e.printStackTrace();
                 closeEverything(this.socket, this.fromClient, this.toClient);
-                break;
             }
         }
     }
