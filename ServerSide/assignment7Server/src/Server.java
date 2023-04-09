@@ -30,7 +30,6 @@ public class Server extends Observable {
                 System.out.println("Connecting to... " + clientSocket);
                 Thread t = new Thread(handler);
                 t.start();
-//                handler.run();
 //                this.addObserver(handler);
             }
         }catch(IOException e){
@@ -39,8 +38,6 @@ public class Server extends Observable {
     }
     protected void processRequest(Item input) {
         String output = "Error";
-//        Gson gson = new Gson();
-//        Item item = gson.fromJson(input, data.Item.class);
         System.out.println("Item is being processed in the server");
         try {
             this.setChanged();
