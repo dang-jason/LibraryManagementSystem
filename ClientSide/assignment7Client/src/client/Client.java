@@ -40,7 +40,6 @@ public class Client extends Application {
     }
     @Override
     public void start(Stage applicationStage) {
-        // TODO: Implement this method
         Parent root;
         try {
             root = FXMLLoader.load(getClass().getResource("../fxmls/logins.fxml"));
@@ -59,8 +58,7 @@ public class Client extends Application {
         this.toServer = new ObjectOutputStream(socket.getOutputStream());
         this.fromServer = new ObjectInputStream(socket.getInputStream());
 
-//        readFromServer();
-//        while(true){}
+        readFromServer();
     }
 
     public void readFromServer(){
@@ -92,7 +90,6 @@ public class Client extends Application {
                 toServer.flush();
 //                socket.close();
                 System.out.println("Item has been sent to server");
-//                break; // might not need to break here if reading inputs?
 //            }
         }catch(Exception e){
             System.out.println("Error in sending to server");
