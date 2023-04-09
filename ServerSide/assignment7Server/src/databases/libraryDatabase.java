@@ -19,13 +19,17 @@ public class libraryDatabase {
     private static final String URI = "mongodb+srv://jd52753:422cassignment7@library.b1aiqgy.mongodb.net/?retryWrites=true&w=majority";
     private static final String DB = "library"; // test
     private static final String COLLECTION = "books"; // test
-    public libraryDatabase(){
+    public static MongoCollection<Document> connectDatabase(){
         mongo = MongoClients.create(URI);
         database = mongo.getDatabase(DB);
         collection = database.getCollection(COLLECTION);
 //        ping();
 //        findAndRead();
         update();
+        return collection;
+    }
+
+    public static void closeDatabase(){
         mongo.close();
     }
     public static void update() {

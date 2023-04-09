@@ -18,12 +18,17 @@
                         <Font name="SansSerif Regular" size="30.0" />
                     </font>
                 </Label>
-                <Button fx:id="loginBtn" layoutX="200.0" layoutY="269.0" mnemonicParsing="false" onAction="#login" prefHeight="42.0" prefWidth="93.0" styleClass="loginBtn" stylesheets="@style.css" text="Login">
+                <Button fx:id="loginBtn" layoutX="200.0" layoutY="261.0" mnemonicParsing="false" onAction="#login" prefHeight="20.0" prefWidth="93.0" styleClass="loginBtn" stylesheets="@style.css" text="Login">
                 <font>
                    <Font size="15.0" />
                 </font></Button>
                 <TextField fx:id="username" layoutX="131.0" layoutY="156.0" prefHeight="25.0" prefWidth="230.0" promptText="Username" styleClass="textfield" stylesheets="@style.css" />
                 <PasswordField fx:id="password" layoutX="131.0" layoutY="196.0" prefHeight="25.0" prefWidth="230.0" promptText="Password" styleClass="textfield" stylesheets="@style.css" />
+            <Button fx:id="registerBtn" layoutX="200.0" layoutY="306.0" mnemonicParsing="false" onAction="#register" prefHeight="20.0" prefWidth="93.0" styleClass="loginBtn" stylesheets="@style.css" text="Register">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Button>
             </children>
         </AnchorPane>
         <Button fx:id="exit" layoutX="632.0" layoutY="2.0" mnemonicParsing="false" onAction="#exit" prefHeight="24.0" prefWidth="52.0" styleClass="exit" stylesheets="@style.css" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="2.0">
