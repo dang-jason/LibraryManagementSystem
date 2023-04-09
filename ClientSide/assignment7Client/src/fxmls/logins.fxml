@@ -31,15 +31,5 @@
             </Button>
             </children>
         </AnchorPane>
-        <Button fx:id="exit" layoutX="632.0" layoutY="2.0" mnemonicParsing="false" onAction="#exit" prefHeight="24.0" prefWidth="52.0" styleClass="exit" stylesheets="@style.css" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="2.0">
-            <graphic>
-                <FontAwesomeIcon fill="WHITE" glyphName="CLOSE" onMouseClicked="#exit" size="1.2em" />
-            </graphic>
-        </Button>
-        <Button fx:id="minimize" layoutX="608.0" layoutY="2.0" mnemonicParsing="false" onAction="#minimize" prefHeight="26.0" prefWidth="45.0" styleClass="minimize" stylesheets="@style.css" AnchorPane.rightAnchor="54.0" AnchorPane.topAnchor="2.0">
-            <graphic>
-                <FontAwesomeIcon fill="WHITE" glyphName="MINUS" size="1.2em" />
-            </graphic>
-        </Button>
     </children>
 </AnchorPane>

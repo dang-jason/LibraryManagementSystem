@@ -20,7 +20,9 @@ public class Client extends Application {
     private ObjectInputStream fromServer;
     private ObjectOutputStream toServer;
     private Socket socket;
-    public Client(){
+
+    public Client(){}
+    public Client(int empty){
         try {
             setUpNetworking();
         } catch (Exception e) {
@@ -42,11 +44,10 @@ public class Client extends Application {
         Parent root;
         try {
             root = FXMLLoader.load(getClass().getResource("../fxmls/logins.fxml"));
-
         } catch(Exception e) {
             throw new RuntimeException(e);
         }
-        applicationStage.initStyle(StageStyle.UNDECORATED);
+//        applicationStage.initStyle(StageStyle.UNDECORATED);
         applicationStage.setTitle("ECE 422C Library User");
         applicationStage.setScene(new Scene(root));
         applicationStage.show();
@@ -67,7 +68,7 @@ public class Client extends Application {
             @Override
             public void run(){
                 Item itemFromServer;
-                while(socket.isConnected()){
+                while(!socket.isClosed()){
                     try {
                         while((itemFromServer = (Item) fromServer.readObject()) != null) {
                             System.out.println("Item received from server:" + itemFromServer);
@@ -85,7 +86,7 @@ public class Client extends Application {
     public void sendToServer(Item item) {
         System.out.println("Sending to server: " + item);
         try {
-//            while(socket.isConnected()){
+//            while(!socket.isClosed()){
                 toServer.reset();
                 toServer.writeUnshared(item); // later replace when have gui
                 toServer.flush();
