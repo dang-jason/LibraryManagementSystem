@@ -14,7 +14,6 @@ public class Item implements Serializable{
         this.author = "";
         this.pages = 0;
         this.summary = "";
-        System.out.println("empty item created");
     }
     public Item(String itemType, String title, String author, int pages, String summary){
         this.itemType = itemType;

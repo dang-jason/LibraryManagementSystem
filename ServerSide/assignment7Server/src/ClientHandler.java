@@ -56,7 +56,7 @@ class ClientHandler implements Runnable, Observer {
                 System.err.println("Error in receiving item from client");
 //                e.printStackTrace();
                 closeEverything(this.socket, this.fromClient, this.toClient);
-//                break;
+                break;
             }
         }
     }
