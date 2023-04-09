@@ -22,7 +22,6 @@ public class Item implements Serializable{
         this.author = author;
         this.pages = pages;
         this.summary = summary;
-        System.out.println("Item values created");
     }
 
     @Override

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="496.0" prefWidth="691.0" styleClass="mainlogin" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.loginController">
+    <children>
+        <AnchorPane layoutX="102.0" layoutY="50.0" prefHeight="370.0" prefWidth="487.0" style="-fx-background-color: #bf5700; -fx-background-radius: 15px;">
+            <children>
+                <FontAwesomeIcon fill="WHITE" glyphName="USER" layoutX="218.0" layoutY="72.0" size="5em" />
+                <Label alignment="CENTER" layoutX="207.0" layoutY="88.0" text="Login" textAlignment="CENTER" textFill="#ebebeb">
+                    <font>
+                        <Font name="SansSerif Regular" size="30.0" />
+                    </font>
+                </Label>
+                <Button fx:id="loginBtn" layoutX="200.0" layoutY="269.0" mnemonicParsing="false" onAction="#login" prefHeight="42.0" prefWidth="93.0" styleClass="loginBtn" stylesheets="@style.css" text="Login">
+                <font>
+                   <Font size="15.0" />
+                </font></Button>
+                <TextField fx:id="username" layoutX="131.0" layoutY="156.0" prefHeight="25.0" prefWidth="230.0" promptText="Username" styleClass="textfield" stylesheets="@style.css" />
+                <PasswordField fx:id="password" layoutX="131.0" layoutY="196.0" prefHeight="25.0" prefWidth="230.0" promptText="Password" styleClass="textfield" stylesheets="@style.css" />
+            </children>
+        </AnchorPane>
+        <Button fx:id="exit" layoutX="632.0" layoutY="2.0" mnemonicParsing="false" onAction="#exit" prefHeight="24.0" prefWidth="52.0" styleClass="exit" stylesheets="@style.css" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="2.0">
+            <graphic>
+                <FontAwesomeIcon fill="WHITE" glyphName="CLOSE" onMouseClicked="#exit" size="1.2em" />
+            </graphic>
+        </Button>
+        <Button fx:id="minimize" layoutX="608.0" layoutY="2.0" mnemonicParsing="false" onAction="#minimize" prefHeight="26.0" prefWidth="45.0" styleClass="minimize" stylesheets="@style.css" AnchorPane.rightAnchor="54.0" AnchorPane.topAnchor="2.0">
+            <graphic>
+                <FontAwesomeIcon fill="WHITE" glyphName="MINUS" size="1.2em" />
+            </graphic>
+        </Button>
+    </children>
+</AnchorPane>
