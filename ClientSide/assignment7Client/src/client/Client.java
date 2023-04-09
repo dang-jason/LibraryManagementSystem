@@ -7,6 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -27,20 +28,6 @@ public class Client extends Application {
             e.printStackTrace();
         }
     }
-    @Override
-    public void start(Stage applicationStage) {
-        // TODO: Implement this method
-        Parent root;
-        try {
-            root = FXMLLoader.load(getClass().getResource("../fxmls/login.fxml"));
-
-        } catch(Exception e) {
-            throw new RuntimeException(e);
-        }
-        applicationStage.setTitle("ECE 422C Library User");
-        applicationStage.setScene(new Scene(root));
-        applicationStage.show();
-    }
 
     public static void main(String[] args) {
         try {
@@ -48,8 +35,23 @@ public class Client extends Application {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
+    @Override
+    public void start(Stage applicationStage) {
+        // TODO: Implement this method
+        Parent root;
+        try {
+            root = FXMLLoader.load(getClass().getResource("../fxmls/logins.fxml"));
+
+        } catch(Exception e) {
+            throw new RuntimeException(e);
+        }
+        applicationStage.initStyle(StageStyle.UNDECORATED);
+        applicationStage.setTitle("ECE 422C Library User");
+        applicationStage.setScene(new Scene(root));
+        applicationStage.show();
+    }
+
     private void setUpNetworking() throws Exception {
         this.socket = new Socket(host, port);
         System.out.println("Connecting to... " + socket);
@@ -78,7 +80,8 @@ public class Client extends Application {
             }
         }).start();
     }
-
+//    Item itemToSend = new Item("Book", "Cant hurt me", "David Goggins", 363, "His Life");
+//    this.client.sendToServer(itemToSend);
     public void sendToServer(Item item) {
         System.out.println("Sending to server: " + item);
         try {

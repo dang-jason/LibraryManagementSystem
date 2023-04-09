@@ -18,6 +18,8 @@ public class loginController implements Initializable {
     @FXML
     private Button loginBtn;
     @FXML
+    private Button registerBtn;
+    @FXML
     private TextField username;
     @FXML
     private PasswordField password;
@@ -31,10 +33,16 @@ public class loginController implements Initializable {
         this.client = new Client();
     }
     public void login(){
-        Item itemToSend = new Item("Book", "Cant hurt me", "David Goggins", 363, "His Life");
-        this.client.sendToServer(itemToSend);
-    }
+        String user = username.getText();
+        String pw = password.getText();
 
+
+    }
+    @FXML
+    public void register(){
+        String user = username.getText();
+        String pw = password.getText();
+    }
     @FXML
     public void minimize(){
         Stage stage = (Stage)minimize.getScene().getWindow();
