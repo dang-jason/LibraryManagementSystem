@@ -7,7 +7,10 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.MongoException;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.Filters;
+import org.bson.BsonDocument;
+import org.bson.BsonInt64;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 
 public class userDatabase {
     private static MongoClient mongo;
@@ -17,15 +20,14 @@ public class userDatabase {
     private static final String DB = "library";
     private static final String COLLECTION = "profiles";
 
-    public static MongoCollection<Document> connectDatabase(){
+    public static void connectDatabase(){
         mongo = MongoClients.create(URI);
         database = mongo.getDatabase(DB);
         collection = database.getCollection(COLLECTION);
-//        ping();
-//        findAndRead();
+    }
+    public static MongoCollection<Document> getCollection(){
         return collection;
     }
-
     public static void closeDatabase(){
         mongo.close();
     }

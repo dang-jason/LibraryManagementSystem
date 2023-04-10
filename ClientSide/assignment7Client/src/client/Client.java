@@ -2,6 +2,7 @@ package client;
 
 import data.Item;
 
+import databases.userDatabase;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -16,13 +17,14 @@ import java.net.Socket;
 
 public class Client extends Application {
     private static String host = "127.0.0.1";
-    private static int port = 4243;
+    private static int port = 4242;
     private ObjectInputStream fromServer;
     private ObjectOutputStream toServer;
     private Socket socket;
-
+    private String username;
     public Client(){}
     public Client(int empty){
+        userDatabase.connectDatabase();
         try {
             setUpNetworking();
         } catch (Exception e) {
@@ -106,4 +108,6 @@ public class Client extends Application {
             e.printStackTrace();
         }
     }
+
+    public void setUsername(String username){this.username = username;}
 }
