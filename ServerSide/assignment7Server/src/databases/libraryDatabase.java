@@ -18,14 +18,14 @@ public class libraryDatabase {
     private static MongoCollection<Document> collection;
     private static final String URI = "mongodb+srv://jd52753:422cassignment7@library.b1aiqgy.mongodb.net/?retryWrites=true&w=majority";
     private static final String DB = "library"; // test
-    private static final String COLLECTION = "books"; // test
+    private static final String COLLECTION = "products"; // test
     public static MongoCollection<Document> connectDatabase(){
         mongo = MongoClients.create(URI);
         database = mongo.getDatabase(DB);
         collection = database.getCollection(COLLECTION);
 //        ping();
 //        findAndRead();
-        update();
+//        update();
         return collection;
     }
 
@@ -34,10 +34,14 @@ public class libraryDatabase {
     }
     public static void update() {
         Document doc = new Document();
-        doc.put("name", "some book");
-        doc.put("type", "book");
-        doc.put("price", 0.0);
-        doc.put("author", "someone");
+        doc.put("itemType", "game");
+        doc.put("name", "The Legendary Starfy");
+        doc.put("creator", "Tose");
+        doc.put("year", 2008);
+        doc.put("summary", "the story of Starfy, a starfish-like creature who embarks on a quest to save his underwater kingdom from evil forces.");gi
+        doc.put("currentCheckout", "");
+        doc.put("previousCheckouts", "");
+
         collection.insertOne(doc);
     }
     public static void findAndRead() {

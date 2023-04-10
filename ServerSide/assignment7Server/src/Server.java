@@ -7,20 +7,33 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Observable;
 
+
+import org.bson.BsonDocument;
+import org.bson.BsonInt64;
+import org.bson.Document;
+import org.bson.conversions.Bson;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.MongoException;
+import com.mongodb.client.MongoCursor;
+import com.mongodb.client.model.Filters;
 public class Server extends Observable {
     private ServerSocket serverSocket;
-    private static int port = 4243;
+    private static int port = 4242;
 
     public Server(ServerSocket serverSocket){this.serverSocket = serverSocket;}
     public static void main(String[] args) {
-//       libraryDatabase db = new libraryDatabase();
-        try {
-            ServerSocket serverSocket = new ServerSocket(port);
-            Server server = new Server(serverSocket);
-            server.setUpNetworking();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+       MongoCollection<Document> collection = libraryDatabase.connectDatabase();
+       libraryDatabase.update();
+//        try {
+//            ServerSocket serverSocket = new ServerSocket(port);
+//            Server server = new Server(serverSocket);
+//            server.setUpNetworking();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
     private void setUpNetworking() {
         try {
