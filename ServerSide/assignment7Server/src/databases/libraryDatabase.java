@@ -1,9 +1,13 @@
 package databases;
 
+import com.mongodb.client.gridfs.GridFSBucket;
+import com.mongodb.client.gridfs.GridFSBuckets;
 import org.bson.BsonDocument;
 import org.bson.BsonInt64;
 import org.bson.Document;
 import org.bson.conversions.Bson;
+
+import java.io.*;
 
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
@@ -12,6 +16,12 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.MongoException;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.Filters;
+import com.mongodb.gridfs.GridFS;
+import com.mongodb.gridfs.GridFSDBFile;
+import com.mongodb.gridfs.GridFSInputFile;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
 public class libraryDatabase {
     private static MongoClient mongo;
     private static MongoDatabase database;
@@ -35,10 +45,10 @@ public class libraryDatabase {
     public static void update() {
         Document doc = new Document();
         doc.put("itemType", "game");
-        doc.put("name", "The Legendary Starfy");
-        doc.put("creator", "Tose");
-        doc.put("year", 2008);
-        doc.put("summary", "the story of Starfy, a starfish-like creature who embarks on a quest to save his underwater kingdom from evil forces.");gi
+        doc.put("name", "Brain Age: Train Your Brain in Minutes a Day!");
+        doc.put("creator", " Nintendo SPD");
+        doc.put("year", 2005);
+        doc.put("summary", "The game is designed to stimulate the brain and improve cognitive abilities through a series of daily exercises, such as solving math problems, memorizing words, and completing puzzles.");
         doc.put("currentCheckout", "");
         doc.put("previousCheckouts", "");
 

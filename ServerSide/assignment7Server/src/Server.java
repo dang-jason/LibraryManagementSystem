@@ -26,14 +26,14 @@ public class Server extends Observable {
     public Server(ServerSocket serverSocket){this.serverSocket = serverSocket;}
     public static void main(String[] args) {
        MongoCollection<Document> collection = libraryDatabase.connectDatabase();
-       libraryDatabase.update();
-//        try {
-//            ServerSocket serverSocket = new ServerSocket(port);
-//            Server server = new Server(serverSocket);
-//            server.setUpNetworking();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+//       libraryDatabase.update();
+        try {
+            ServerSocket serverSocket = new ServerSocket(port);
+            Server server = new Server(serverSocket);
+            server.setUpNetworking();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     private void setUpNetworking() {
         try {

@@ -45,12 +45,18 @@ class ClientHandler implements Runnable, Observer {
 
     @Override
     public void run() {
+        String query;
         Item input;
         while(socket.isConnected()){
             try{
-                //need to fix read from server if nothing to read
-                while((input = (Item) fromClient.readObject()) != null) {
-                    System.out.println("Item received from client" + input);
+                //need to fix read from server if nothing to read -- do something with process request for updating
+                while((query = (String) fromClient.readObject()) != null) {
+                    input = (Item) fromClient.readObject();
+                    if(query.equals("checkout")){
+                        //do something
+                    }else if(query.equals("return")){
+                        //do something
+                    }
                 }
             } catch(IOException | ClassNotFoundException e){
                 System.err.println("Error in receiving item from client");
