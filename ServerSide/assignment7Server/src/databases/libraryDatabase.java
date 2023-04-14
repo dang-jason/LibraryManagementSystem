@@ -1,13 +1,12 @@
 package databases;
 
-import com.mongodb.client.gridfs.GridFSBucket;
-import com.mongodb.client.gridfs.GridFSBuckets;
+import data.Item;
 import org.bson.BsonDocument;
 import org.bson.BsonInt64;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
-import java.io.*;
+import java.util.ArrayList;
 
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
@@ -15,13 +14,6 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.MongoException;
 import com.mongodb.client.MongoCursor;
-import com.mongodb.client.model.Filters;
-import com.mongodb.gridfs.GridFS;
-import com.mongodb.gridfs.GridFSDBFile;
-import com.mongodb.gridfs.GridFSInputFile;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
 public class libraryDatabase {
     private static MongoClient mongo;
     private static MongoDatabase database;
@@ -34,7 +26,7 @@ public class libraryDatabase {
         database = mongo.getDatabase(DB);
         collection = database.getCollection(COLLECTION);
 //        ping();
-//        findAndRead();
+        parseDB();
 //        update();
         return collection;
     }
@@ -51,15 +43,22 @@ public class libraryDatabase {
         doc.put("summary", "The game is designed to stimulate the brain and improve cognitive abilities through a series of daily exercises, such as solving math problems, memorizing words, and completing puzzles.");
         doc.put("currentCheckout", "");
         doc.put("previousCheckouts", "");
-
         collection.insertOne(doc);
     }
-    public static void findAndRead() {
-        MongoCursor cursor = collection.find(Filters.empty()).cursor();
-        while (cursor.hasNext()) {
-            System.out.println(cursor.next());
+    public static ArrayList<Item> parseDB() {
+        ArrayList<Item> items = new ArrayList<Item>();
+        try (MongoCursor<Document> cursor = collection.find().iterator()) {
+            while (cursor.hasNext()) {
+                Document doc = cursor.next();
+                String pages_year;
+                if(doc.containsKey("pages")) pages_year = "pages"; else pages_year = "year";
+                Item i = new Item((String)doc.get("itemType"),(String)doc.get("name"), (String)doc.get("creator"), (Integer)doc.get(pages_year), (String)doc.get("summary"), (String)doc.get("currentCheckout"), (String)doc.get("previousCheckout"));
+                items.add(i);
+            }
+            return items;
         }
     }
+
     public static void ping() {
         try {
             Bson command = new BsonDocument("ping", new BsonInt64(1));

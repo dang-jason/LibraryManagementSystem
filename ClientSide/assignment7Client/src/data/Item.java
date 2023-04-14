@@ -3,34 +3,57 @@ package data;
 import java.io.Serializable;
 public class Item implements Serializable{
     protected String itemType;
-    protected String title;
-    protected String author;
-    protected int pages;
+    protected String name;
+    protected String creator;
+    protected int pages_year;
     protected String summary;
+    protected String current;
+    protected String previous;
 
     public Item(){
         this.itemType = "";
-        this.title = "";
-        this.author = "";
-        this.pages = 0;
+        this.name = "";
+        this.creator = "";
+        this.pages_year = 0;
         this.summary = "";
-        System.out.println("empty item created");
+        this.current = "";
+        this.previous ="";
     }
-    public Item(String itemType, String title, String author, int pages, String summary){
+
+    public String getCurrent() {
+        return current;
+    }
+
+    public void setCurrent(String current) {
+        this.current = current;
+    }
+
+    public String getPrevious() {
+        return previous;
+    }
+
+    public void setPrevious(String previous) {
+        this.previous = previous;
+    }
+
+    public Item(String itemType, String name, String creator, int pages_year, String summary, String current, String previous){
         this.itemType = itemType;
-        this.title = title;
-        this.author = author;
-        this.pages = pages;
+        this.name = name;
+        this.creator = creator;
+        this.pages_year = pages_year;
         this.summary = summary;
+        this.current = current;
+        this.previous = previous;
+        System.out.println("Item values created");
     }
 
     @Override
     public String toString() {
         return "Item{" +
                 "itemType='" + itemType + '\'' +
-                ", title='" + title + '\'' +
-                ", author='" + author + '\'' +
-                ", pages=" + pages +
+                ", title='" + name + '\'' +
+                ", author='" + creator + '\'' +
+                ", pages=" + pages_year +
                 ", summary='" + summary + '\'' +
                 '}';
     }
@@ -43,28 +66,28 @@ public class Item implements Serializable{
         this.itemType = itemType;
     }
 
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getAuthor() {
-        return author;
+    public String getCreator() {
+        return creator;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
+    public void setCreator(String creator) {
+        this.creator = creator;
     }
 
-    public int getPages() {
-        return pages;
+    public int getPages_year() {
+        return pages_year;
     }
 
-    public void setPages(int pages) {
-        this.pages = pages;
+    public void setPages_year(int pages_year) {
+        this.pages_year = pages_year;
     }
 
     public String getSummary() {

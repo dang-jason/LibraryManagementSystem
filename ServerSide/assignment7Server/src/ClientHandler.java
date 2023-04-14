@@ -1,5 +1,6 @@
 import data.Item;
 import com.google.gson.Gson;
+import databases.libraryDatabase;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -30,23 +31,40 @@ class ClientHandler implements Runnable, Observer {
         }
     }
 
-    protected void sendToClient(Item item) {
+    protected void sendToClient(String query, Item item) {
         System.out.println("Sending to client: " + item);
         try {
-            toClient.reset();
-            toClient.writeUnshared(item);
-            toClient.flush();
-            System.out.println("Item has been sent to client");
+            if(query.equals("add")) {
+                toClient.reset();
+                toClient.writeUnshared("add");
+                toClient.flush();
+                toClient.reset();
+                toClient.writeUnshared(item);
+                toClient.flush();
+            }else if(query.equals("update")){
+                toClient.reset();
+                toClient.writeUnshared("update");
+                toClient.flush();
+                toClient.reset();
+                toClient.writeUnshared(item);
+                toClient.flush();
+            }
+                System.out.println("Item has been sent to client");
         }catch(Exception e){
             e.printStackTrace();
             System.out.println("Error in sending to client");
         }
     }
-
+    public void sendCatalog(){
+        ArrayList<Item> items = libraryDatabase.parseDB();
+        for(Item i : items)
+            sendToClient("add", i);
+    }
     @Override
     public void run() {
         String query;
         Item input;
+        sendCatalog();
         while(socket.isConnected()){
             try{
                 //need to fix read from server if nothing to read -- do something with process request for updating
@@ -54,6 +72,7 @@ class ClientHandler implements Runnable, Observer {
                     input = (Item) fromClient.readObject();
                     if(query.equals("checkout")){
                         //do something
+                        System.out.println("CHECKOUTTING " + input);
                     }else if(query.equals("return")){
                         //do something
                     }
@@ -69,7 +88,7 @@ class ClientHandler implements Runnable, Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        this.sendToClient((Item) arg);
+        this.sendToClient("update",(Item) arg);
     }
 
     public void closeEverything(Socket socket, ObjectInputStream fromClient, ObjectOutputStream toClient){

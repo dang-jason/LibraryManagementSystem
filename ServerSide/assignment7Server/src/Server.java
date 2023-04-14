@@ -26,7 +26,6 @@ public class Server extends Observable {
     public Server(ServerSocket serverSocket){this.serverSocket = serverSocket;}
     public static void main(String[] args) {
        MongoCollection<Document> collection = libraryDatabase.connectDatabase();
-//       libraryDatabase.update();
         try {
             ServerSocket serverSocket = new ServerSocket(port);
             Server server = new Server(serverSocket);
@@ -43,7 +42,7 @@ public class Server extends Observable {
                 System.out.println("Connecting to... " + clientSocket);
                 Thread t = new Thread(handler);
                 t.start();
-//                this.addObserver(handler);
+                this.addObserver(handler);
             }
         }catch(IOException e){
             closeServerSocket();
