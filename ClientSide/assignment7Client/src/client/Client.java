@@ -7,6 +7,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -22,6 +23,8 @@ public class Client extends Application {
     private ObjectOutputStream toServer;
     private Socket socket;
     private String username;
+    private double x = 0;
+    private double y = 0;
     public Client(){}
     public Client(int empty){
         userDatabase.connectDatabase();
@@ -50,6 +53,15 @@ public class Client extends Application {
         }
 //        applicationStage.initStyle(StageStyle.UNDECORATED);
         applicationStage.setTitle("ECE 422C Library User");
+        root.setOnMousePressed((MouseEvent event) ->{
+            x = event.getSceneX();
+            y = event.getSceneY();
+        });
+        root.setOnMouseDragged((MouseEvent event) ->{
+            applicationStage.setX(event.getScreenX() - x);
+            applicationStage.setY(event.getScreenY() - y);
+        });
+        applicationStage.initStyle(StageStyle.TRANSPARENT);
         applicationStage.setScene(new Scene(root));
         applicationStage.show();
     }
@@ -67,11 +79,17 @@ public class Client extends Application {
         new Thread(new Runnable(){
             @Override
             public void run(){
+                String query;
                 Item itemFromServer;
                 while(!socket.isClosed()){
                     try {
-                        while((itemFromServer = (Item) fromServer.readObject()) != null) {
-                            System.out.println("Item received from server:" + itemFromServer);
+                        while((query = (String) fromServer.readObject()) != null) {
+                            itemFromServer = (Item) fromServer.readObject();
+                            if(query.equals("add")){
+                                //do something
+                            }else if(query.equals("update")){
+                                //do something
+                            }
                         }
                     } catch (IOException | ClassNotFoundException e) {
                         System.out.println("Error in receiving item from server");
