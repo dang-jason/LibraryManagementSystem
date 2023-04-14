@@ -24,3 +24,21 @@
 .textfield:focused{
     -fx-border-width:0px 0px 1px 0px;
 }
+
+.exit{
+    -fx-background-color:transparent;
+    -fx-cursor:hand;
+}
+
+.exit:hover{
+    -fx-background-color:#f13f57;
+}
+
+.minimize{
+    -fx-background-color:transparent;
+    -fx-cursor:hand;
+}
+
+.minimize:hover{
+    -fx-background-color:#5481ab;
+}

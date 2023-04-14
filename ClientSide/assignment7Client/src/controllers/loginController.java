@@ -32,13 +32,15 @@ public class loginController implements Initializable {
     private Client client;
 
     @FXML
-    private Button loginBtn;
+    private Button exit;
     @FXML
-    private Button registerBtn;
+    private Button minimize;
     @FXML
     private TextField username;
     @FXML
     private PasswordField password;
+    private double x = 0;
+    private double y = 0;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.client = new Client(0);
@@ -69,6 +71,14 @@ public class loginController implements Initializable {
                     dashboardController dashboardController = loader.getController();
                     dashboardController.setClient(this.client);
                     Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+                    root.setOnMousePressed((MouseEvent e) ->{
+                        x = e.getSceneX();
+                        y = e.getSceneY();
+                    });
+                    root.setOnMouseDragged((MouseEvent e) ->{
+                        stage.setX(e.getScreenX() - x);
+                        stage.setY(e.getScreenY() - y);
+                    });
                     Scene scene = new Scene(root);
                     stage.setScene(scene);
                     stage.show();
@@ -122,5 +132,16 @@ public class loginController implements Initializable {
             e.printStackTrace();
             System.err.println("Error in registering");
         }
+    }
+
+    @FXML
+    public void minimize(){
+        Stage stage = (Stage)minimize.getScene().getWindow();
+        stage.setIconified(true);
+    }
+
+    @FXML
+    public void exit(){
+        System.exit(0);
     }
 }
