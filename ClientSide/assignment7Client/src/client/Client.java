@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 
 public class Client extends Application {
     private static String host = "127.0.0.1";
@@ -71,7 +72,6 @@ public class Client extends Application {
         System.out.println("Connecting to... " + socket);
         this.toServer = new ObjectOutputStream(socket.getOutputStream());
         this.fromServer = new ObjectInputStream(socket.getInputStream());
-
         readFromServer();
     }
 
@@ -86,9 +86,9 @@ public class Client extends Application {
                         while((query = (String) fromServer.readObject()) != null) {
                             itemFromServer = (Item) fromServer.readObject();
                             if(query.equals("add")){
-                                //do something
+                                //do something to display the items
                             }else if(query.equals("update")){
-                                //do something
+                                //do something to update the items
                             }
                         }
                     } catch (IOException | ClassNotFoundException e) {
@@ -99,9 +99,7 @@ public class Client extends Application {
             }
         }).start();
     }
-//    Item itemToSend = new Item("Book", "Cant hurt me", "David Goggins", 363, "His Life");
-//    this.client.sendToServer(itemToSend);
-    public void sendToServer(Item item) {
+    public void sendToServer(String query, Item item) {
         System.out.println("Sending to server: " + item);
         try {
 //            while(!socket.isClosed()){

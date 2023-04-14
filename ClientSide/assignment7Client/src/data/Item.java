@@ -1,6 +1,7 @@
 package data;
 
 import java.io.Serializable;
+
 public class Item implements Serializable{
     protected String itemType;
     protected String name;

@@ -1,8 +1,6 @@
 package controllers;
 
 import client.Client;
-import com.mongodb.BasicDBObject;
-import data.Item;
 import databases.userDatabase;
 
 import javafx.event.ActionEvent;
