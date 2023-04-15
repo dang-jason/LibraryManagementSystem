@@ -4,6 +4,8 @@ import data.Item;
 
 import databases.userDatabase;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -26,6 +28,9 @@ public class Client extends Application {
     private String username;
     private double x = 0;
     private double y = 0;
+    private ObservableList<Item> books = FXCollections.observableArrayList();
+    private ObservableList<Item> games = FXCollections.observableArrayList();
+    private ObservableList<Item> checkout = FXCollections.observableArrayList();
     public Client(){}
     public Client(int empty){
         userDatabase.connectDatabase();
@@ -36,7 +41,9 @@ public class Client extends Application {
             e.printStackTrace();
         }
     }
-
+    public String getUsername() {
+        return username;
+    }
     public static void main(String[] args) {
         try {
             launch(args);
@@ -72,7 +79,6 @@ public class Client extends Application {
         System.out.println("Connecting to... " + socket);
         this.toServer = new ObjectOutputStream(socket.getOutputStream());
         this.fromServer = new ObjectInputStream(socket.getInputStream());
-        readFromServer();
     }
 
     public void readFromServer(){
@@ -87,6 +93,17 @@ public class Client extends Application {
                             itemFromServer = (Item) fromServer.readObject();
                             if(query.equals("add")){
                                 //do something to display the items
+                                if(itemFromServer.getItemType().equals("book")){
+                                    itemFromServer.setItemType("Book");
+                                    books.add(itemFromServer);
+                                }
+                                else{
+                                    itemFromServer.setItemType("Game");
+                                    games.add(itemFromServer);
+                                }
+                                if(itemFromServer.getCurrent().equals(username)){
+                                    checkout.add(itemFromServer);
+                                }
                             }else if(query.equals("update")){
                                 //do something to update the items
                             }
@@ -102,13 +119,13 @@ public class Client extends Application {
     public void sendToServer(String query, Item item) {
         System.out.println("Sending to server: " + item);
         try {
-//            while(!socket.isClosed()){
                 toServer.reset();
-                toServer.writeUnshared(item); // later replace when have gui
+                toServer.writeUnshared(query);
                 toServer.flush();
-//                socket.close();
+                toServer.reset();
+                toServer.writeUnshared(item);
+                toServer.flush();
                 System.out.println("Item has been sent to server");
-//            }
         }catch(Exception e){
             System.out.println("Error in sending to server");
             closeEverything(socket, fromServer, toServer);
@@ -126,4 +143,16 @@ public class Client extends Application {
     }
 
     public void setUsername(String username){this.username = username;}
+
+    public ObservableList<Item> getBooks() {
+        return books;
+    }
+
+    public ObservableList<Item> getGames() {
+        return games;
+    }
+
+    public ObservableList<Item> getCheckout() {
+        return checkout;
+    }
 }

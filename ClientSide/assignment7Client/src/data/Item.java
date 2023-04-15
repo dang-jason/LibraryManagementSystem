@@ -45,17 +45,18 @@ public class Item implements Serializable{
         this.summary = summary;
         this.current = current;
         this.previous = previous;
-        System.out.println("Item values created");
     }
 
     @Override
     public String toString() {
         return "Item{" +
                 "itemType='" + itemType + '\'' +
-                ", title='" + name + '\'' +
-                ", author='" + creator + '\'' +
-                ", pages=" + pages_year +
+                ", name='" + name + '\'' +
+                ", creator='" + creator + '\'' +
+                ", pages_year=" + pages_year +
                 ", summary='" + summary + '\'' +
+                ", current='" + current + '\'' +
+                ", previous='" + previous + '\'' +
                 '}';
     }
 

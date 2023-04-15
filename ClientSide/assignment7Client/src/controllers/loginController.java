@@ -8,15 +8,13 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -57,7 +55,7 @@ public class loginController implements Initializable {
                 Document doc = collection.find(Filters.and(Filters.eq("username", username.getText().toLowerCase()), Filters.eq("password", password.getText()))).first();
                 if(doc != null){
                     this.client.setUsername(username.getText());
-
+                    this.client.readFromServer();
                     alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Admin Message");
                     alert.setHeaderText(null);
@@ -68,6 +66,8 @@ public class loginController implements Initializable {
                     Parent root = loader.load();
                     dashboardController dashboardController = loader.getController();
                     dashboardController.setClient(this.client);
+                    dashboardController.setItems();
+                    dashboardController.setUser();
                     Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
                     root.setOnMousePressed((MouseEvent e) ->{
                         x = e.getSceneX();
@@ -79,6 +79,8 @@ public class loginController implements Initializable {
                     });
                     Scene scene = new Scene(root);
                     stage.setScene(scene);
+                    stage.setX(325);
+                    stage.setY(200);
                     stage.show();
                 }else{
                     alert = new Alert(Alert.AlertType.ERROR);
@@ -93,6 +95,7 @@ public class loginController implements Initializable {
             System.err.println("Error in login");
         }
     }
+    //set a comfirmation alert to add
     @FXML
     public void register() {
         MongoCollection<Document> collection = userDatabase.getCollection();
@@ -107,17 +110,24 @@ public class loginController implements Initializable {
             } else {
                 Document doc = collection.find(Filters.eq("username", username.getText().toLowerCase())).first();
                 if(doc == null){
-                    Document profile = new Document();
-                    profile.put("username", username.getText().toLowerCase());
-                    profile.put("password", password.getText());
-                    collection.insertOne(profile);
-                    username.clear();
-                    password.clear();
-                    alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert = new Alert(Alert.AlertType.CONFIRMATION);
                     alert.setTitle("Admin Message");
                     alert.setHeaderText(null);
-                    alert.setContentText("Registration successful. Please login to proceed.");
-                    alert.showAndWait();
+                    alert.setContentText("Are you sure you want to register");
+                    Optional<ButtonType> result = alert.showAndWait();
+                    if(result.get() == ButtonType.OK) {
+                        Document profile = new Document();
+                        profile.put("username", username.getText().toLowerCase());
+                        profile.put("password", password.getText());
+                        collection.insertOne(profile);
+                        username.clear();
+                        password.clear();
+                        alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Admin Message");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Registration successful. Please login to proceed.");
+                        alert.showAndWait();
+                    }
                 } else {
                     alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Admin Message");
