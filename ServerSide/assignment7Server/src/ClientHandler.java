@@ -19,7 +19,6 @@ class ClientHandler implements Runnable, Observer {
     private Socket socket;
     private ObjectInputStream fromClient;
     private ObjectOutputStream toClient;
-    private String clientUser;
 
     protected ClientHandler(Server server, Socket clientSocket) {
         this.server = server;
@@ -71,20 +70,14 @@ class ClientHandler implements Runnable, Observer {
                 while((query = (String) fromClient.readObject()) != null) {
                     item = (Item) fromClient.readObject();
                     if(query.equals("checkout")){
-                        //do something
+                        server.processRequest(item);
                         Document doc = libraryDatabase.getCollection().find(Filters.eq("name", item.getName())).first();
                         libraryDatabase.getCollection().updateOne(doc, new Document("$set", new Document("currentCheckout", item.getCurrent())));
                     }else if(query.equals("return")){
-                        //do something
+                        server.processRequest(item);
                         Document doc = libraryDatabase.getCollection().find(Filters.eq("name", item.getName())).first();
-                        String s = (String) doc.get("previousCheckout");
-                        if(s.length() != 0){
-                            s += ", " + (String) doc.get("currentCheckout");
-                        }else{
-                            s = (String) doc.get("currentCheckout");
-                        }
-                        libraryDatabase.getCollection().updateOne(doc, new Document("$set", new Document("previousCheckouts", s)));
-                        libraryDatabase.getCollection().updateOne(doc, new Document("$set", new Document("currentCheckout", "") ));
+                        libraryDatabase.getCollection().updateOne(doc, new Document("$set", new Document("previousCheckouts", item.getPrevious())));
+                        libraryDatabase.getCollection().updateOne(doc, new Document("$set", new Document("currentCheckout", item.getCurrent())));
                     }
                 }
             } catch(IOException | ClassNotFoundException e){

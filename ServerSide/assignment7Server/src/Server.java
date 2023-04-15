@@ -1,4 +1,3 @@
-import com.google.gson.Gson;
 import data.Item;
 import databases.libraryDatabase;
 
@@ -7,18 +6,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Observable;
 
-
-import org.bson.BsonDocument;
-import org.bson.BsonInt64;
-import org.bson.Document;
-import org.bson.conversions.Bson;
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
-import com.mongodb.MongoException;
-import com.mongodb.client.MongoCursor;
-import com.mongodb.client.model.Filters;
 public class Server extends Observable {
     private ServerSocket serverSocket;
     private static int port = 4242;
@@ -49,11 +36,10 @@ public class Server extends Observable {
         }
     }
     protected void processRequest(Item input) {
-        String output = "Error";
-        System.out.println("Item is being processed in the server");
+        System.out.println("Item is being processed in the server to send to observables");
         try {
             this.setChanged();
-            this.notifyObservers(output);
+            this.notifyObservers(input);
         } catch (Exception e) {
             e.printStackTrace();
         }
