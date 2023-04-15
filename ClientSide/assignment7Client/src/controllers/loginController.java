@@ -65,6 +65,7 @@ public class loginController implements Initializable {
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("../fxmls/dashboard.fxml"));
                     Parent root = loader.load();
                     dashboardController dashboardController = loader.getController();
+                    client.setDbController(dashboardController);
                     dashboardController.setClient(this.client);
                     dashboardController.setItems();
                     dashboardController.setUser();

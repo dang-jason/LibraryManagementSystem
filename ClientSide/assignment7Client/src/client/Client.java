@@ -1,5 +1,6 @@
 package client;
 
+import controllers.dashboardController;
 import data.Item;
 
 import databases.userDatabase;
@@ -31,6 +32,7 @@ public class Client extends Application {
     private ObservableList<Item> books = FXCollections.observableArrayList();
     private ObservableList<Item> games = FXCollections.observableArrayList();
     private ObservableList<Item> checkout = FXCollections.observableArrayList();
+    private dashboardController dbController;
     public Client(){}
     public Client(int empty){
         userDatabase.connectDatabase();
@@ -104,8 +106,29 @@ public class Client extends Application {
                                 if(itemFromServer.getCurrent().equals(username)){
                                     checkout.add(itemFromServer);
                                 }
-                            }else if(query.equals("update")){
+                            }else if(query.equals("update")) {
                                 //do something to update the items
+                                if (!itemFromServer.getCurrent().equals(username)) {
+                                    System.out.println(itemFromServer + " HAS TO BE UPDATED");
+                                    if (itemFromServer.getItemType().equals("Book")) {
+                                        for (Item i : books) {
+                                            if (i.getName().equals(itemFromServer.getName())) {
+                                                i.setCurrent(itemFromServer.getCurrent());
+                                                dbController.refreshTable();
+                                                break;
+                                            }
+                                        }
+                                    } else {
+                                        itemFromServer.setItemType("Game");
+                                        for (Item i : games) {
+                                            if (i.getName().equals(itemFromServer.getName())) {
+                                                i.setCurrent(itemFromServer.getCurrent());
+                                                dbController.refreshTable();
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
                     } catch (IOException | ClassNotFoundException e) {
@@ -143,7 +166,9 @@ public class Client extends Application {
     }
 
     public void setUsername(String username){this.username = username;}
-
+    public void setDbController(dashboardController dbController) {
+        this.dbController = dbController;
+    }
     public ObservableList<Item> getBooks() {
         return books;
     }

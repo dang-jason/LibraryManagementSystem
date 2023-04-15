@@ -152,9 +152,7 @@ public class dashboardController implements Initializable {
         bookTable.setItems(client.getBooks());
         gameTable.setItems(client.getGames());
         checkoutTable.setItems(client.getCheckout());
-        bookTable.refresh();
-        gameTable.refresh();
-        checkoutTable.refresh();
+        refreshTable();
     }
     public void setUser(){
         userTag.setText("User: " + client.getUsername());
@@ -225,6 +223,12 @@ public class dashboardController implements Initializable {
         Alert alert;
         for(Item i : books) {
             if(i.getCurrent().equals(client.getUsername())) {
+                String s = i.getPrevious();
+                if(s.length() != 0){
+                    s += ", " + i.getCurrent();
+                }else{
+                    s = i.getCurrent();
+                }
                 i.setCurrent("");
                 bookTable.refresh();
                 client.getCheckout().remove(i);
@@ -242,6 +246,12 @@ public class dashboardController implements Initializable {
         bookTable.getSelectionModel().clearSelection();
         ObservableList<Item> games = gameTable.getSelectionModel().getSelectedItems();
         for(Item i : games) {
+            String s = i.getPrevious();
+            if(s.length() != 0){
+                s += ", " + i.getCurrent();
+            }else{
+                s = i.getCurrent();
+            }
             if(i.getCurrent().equals(client.getUsername())) {
                 i.setCurrent("");
                 gameTable.refresh();
@@ -260,21 +270,31 @@ public class dashboardController implements Initializable {
         gameTable.getSelectionModel().clearSelection();
         ObservableList<Item> checkout = checkoutTable.getSelectionModel().getSelectedItems();
         for(Item i : checkout) {
-                i.setCurrent("");
-                bookTable.refresh();
-                gameTable.refresh();
-                client.getCheckout().remove(i);
-                checkoutTable.refresh();
-                client.sendToServer("return", i);
+            String s = i.getPrevious();
+            if(s.length() != 0){
+                s += ", " + i.getCurrent();
+            }else{
+                s = i.getCurrent();
+            }
+            i.setCurrent("");
+            bookTable.refresh();
+            gameTable.refresh();
+            client.getCheckout().remove(i);
+            checkoutTable.refresh();
+            client.sendToServer("return", i);
         }
         checkoutTable.getSelectionModel().clearSelection();
+    }
+    public void refreshTable(){
+        bookTable.refresh();
+        gameTable.refresh();
+        checkoutTable.refresh();
     }
     @FXML
     public void minimize(){
         Stage stage = (Stage)minimize.getScene().getWindow();
         stage.setIconified(true);
     }
-
     @FXML
     public void exit(){
         System.exit(0);
