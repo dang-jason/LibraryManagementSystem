@@ -25,7 +25,7 @@ public class Server extends Observable {
 
     public Server(ServerSocket serverSocket){this.serverSocket = serverSocket;}
     public static void main(String[] args) {
-       MongoCollection<Document> collection = libraryDatabase.connectDatabase();
+        libraryDatabase.connectDatabase();
         try {
             ServerSocket serverSocket = new ServerSocket(port);
             Server server = new Server(serverSocket);

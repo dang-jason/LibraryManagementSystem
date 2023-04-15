@@ -1,6 +1,9 @@
+import com.mongodb.client.model.Filters;
 import data.Item;
 import com.google.gson.Gson;
 import databases.libraryDatabase;
+import org.bson.Document;
+import org.bson.conversions.Bson;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -32,7 +35,6 @@ class ClientHandler implements Runnable, Observer {
     }
 
     protected void sendToClient(String query, Item item) {
-        System.out.println("Sending to client: " + item);
         try {
             if(query.equals("add")) {
                 toClient.reset();
@@ -49,7 +51,6 @@ class ClientHandler implements Runnable, Observer {
                 toClient.writeUnshared(item);
                 toClient.flush();
             }
-                System.out.println("Item has been sent to client");
         }catch(Exception e){
             e.printStackTrace();
             System.out.println("Error in sending to client");
@@ -57,24 +58,33 @@ class ClientHandler implements Runnable, Observer {
     }
     public void sendCatalog(){
         ArrayList<Item> items = libraryDatabase.parseDB();
-        for(Item i : items)
-            sendToClient("add", i);
+        for(Item i : items) sendToClient("add", i);
     }
     @Override
     public void run() {
         String query;
-        Item input;
+        Item item;
         sendCatalog();
         while(socket.isConnected()){
             try{
                 //need to fix read from server if nothing to read -- do something with process request for updating
                 while((query = (String) fromClient.readObject()) != null) {
-                    input = (Item) fromClient.readObject();
+                    item = (Item) fromClient.readObject();
                     if(query.equals("checkout")){
                         //do something
-                        System.out.println("CHECKOUTTING " + input);
+                        Document doc = libraryDatabase.getCollection().find(Filters.eq("name", item.getName())).first();
+                        libraryDatabase.getCollection().updateOne(doc, new Document("$set", new Document("currentCheckout", item.getCurrent())));
                     }else if(query.equals("return")){
                         //do something
+                        Document doc = libraryDatabase.getCollection().find(Filters.eq("name", item.getName())).first();
+                        String s = (String) doc.get("previousCheckout");
+                        if(s.length() != 0){
+                            s += ", " + (String) doc.get("currentCheckout");
+                        }else{
+                            s = (String) doc.get("currentCheckout");
+                        }
+                        libraryDatabase.getCollection().updateOne(doc, new Document("$set", new Document("previousCheckouts", s)));
+                        libraryDatabase.getCollection().updateOne(doc, new Document("$set", new Document("currentCheckout", "") ));
                     }
                 }
             } catch(IOException | ClassNotFoundException e){
