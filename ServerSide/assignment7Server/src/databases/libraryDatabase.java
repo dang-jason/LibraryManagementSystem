@@ -1,11 +1,17 @@
 package databases;
 
+import com.mongodb.client.gridfs.GridFSBucket;
+import com.mongodb.client.gridfs.GridFSBuckets;
+import com.mongodb.client.gridfs.model.GridFSFile;
+import com.mongodb.client.model.Filters;
 import data.Item;
 import org.bson.BsonDocument;
 import org.bson.BsonInt64;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 
 import com.mongodb.client.MongoClient;
@@ -14,6 +20,8 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.MongoException;
 import com.mongodb.client.MongoCursor;
+import org.bson.types.ObjectId;
+
 public class libraryDatabase {
     private static MongoClient mongo;
     private static MongoDatabase database;
