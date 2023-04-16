@@ -39,8 +39,8 @@
    <left>
       <AnchorPane prefHeight="541.0" prefWidth="313.0" styleClass="mainlogin" stylesheets="@style.css" BorderPane.alignment="CENTER">
          <children>
-            <ImageView fitHeight="200.0" fitWidth="214.0" layoutX="-7.0" pickOnBounds="true" />
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#e1f1ff" height="232.0" layoutX="57.0" layoutY="27.0" stroke="BLACK" strokeType="INSIDE" width="200.0" />
+            <ImageView fx:id="imageDisplay" fitHeight="233.0" fitWidth="200.0" layoutX="57.0" layoutY="27.0" pickOnBounds="true" />
             <Button fx:id="checkoutBtn" layoutX="100.0" layoutY="283.0" mnemonicParsing="false" onAction="#checkoutItem" prefHeight="27.0" prefWidth="114.0" text="Checkout" />
             <Button layoutX="100.0" layoutY="321.0" mnemonicParsing="false" onAction="#returnItem" prefHeight="27.0" prefWidth="114.0" text="Return" />
          </children>
@@ -53,7 +53,7 @@
                <tabs>
                   <Tab text="Books">
                      <content>
-                        <TableView fx:id="bookTable" prefHeight="573.0" prefWidth="690.0">
+                        <TableView fx:id="bookTable" onMouseClicked="#getItem" prefHeight="573.0" prefWidth="690.0">
                            <columns>
                               <TableColumn fx:id="bookName" editable="false" prefWidth="209.0" text="Book Name" />
                               <TableColumn fx:id="bookAuthor" editable="false" prefWidth="106.0" text="Author" />
@@ -66,7 +66,7 @@
                   </Tab>
                   <Tab text="Games">
                      <content>
-                        <TableView fx:id="gameTable" prefHeight="200.0" prefWidth="200.0">
+                        <TableView fx:id="gameTable" onMouseClicked="#getItem" prefHeight="200.0" prefWidth="200.0">
                            <columns>
                               <TableColumn fx:id="gameName" editable="false" prefWidth="209.0" text="Game Name" />
                               <TableColumn fx:id="gameDeveloper" editable="false" prefWidth="142.0" text="Developer" />
@@ -79,7 +79,7 @@
                   </Tab>
                   <Tab text="Items Checked Out">
                      <content>
-                        <TableView fx:id="checkoutTable" prefHeight="491.0" prefWidth="825.0">
+                        <TableView fx:id="checkoutTable" onMouseClicked="#getItem" prefHeight="491.0" prefWidth="825.0">
                            <columns>
                               <TableColumn fx:id="itemCheckoutName" editable="false" prefWidth="212.0" text="Name" />
                               <TableColumn fx:id="itemCheckoutType" editable="false" prefWidth="143.0" text="Item Type" />

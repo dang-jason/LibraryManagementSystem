@@ -2,6 +2,7 @@ package controllers;
 
 import client.Client;
 import data.Item;
+import databases.userDatabase;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -12,10 +13,15 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -25,6 +31,8 @@ public class dashboardController implements Initializable {
     private Button minimize;
     @FXML
     private Label userTag;
+    @FXML
+    private ImageView imageDisplay;
     @FXML
     private TableView<Item> bookTable;
     @FXML
@@ -163,6 +171,24 @@ public class dashboardController implements Initializable {
         Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         stage.setScene(scene);
         stage.show();
+    }
+    @FXML void getItem(MouseEvent event){
+        Item item = null;
+        if(((TableView)event.getSource()).getId().equals("bookTable")){
+            item = bookTable.getSelectionModel().getSelectedItem();
+            if(item == null) return;
+        }else if(((TableView)event.getSource()).getId().equals("gameTable")){
+            item = gameTable.getSelectionModel().getSelectedItem();
+            if(item == null) return;
+        }else if(((TableView)event.getSource()).getId().equals("checkoutTable")){
+            item = checkoutTable.getSelectionModel().getSelectedItem();
+            if(item == null) return;
+        }
+        if(item != null && userDatabase.getImage(item.getName()) != null) {
+            InputStream inputStream = new ByteArrayInputStream(userDatabase.getImage(item.getName()));
+            Image image = new Image(inputStream);
+            imageDisplay.setImage(image);
+        }
     }
     @FXML
     public void checkoutItem(){
