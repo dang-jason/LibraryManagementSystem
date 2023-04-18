@@ -64,68 +64,75 @@ public class holderController implements Initializable {
 
     @FXML
     public void holdItem(){
-        if(item.getCurrent().equals("")){
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Admin Message");
-            alert.setHeaderText(null);
-            alert.setContentText("There is currently noone checking out this book, so you cannot place a hold");
-            alert.showAndWait();
-            return;
-        }
-        if(item.getCurrent().equals(client.getUsername())){
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Admin Message");
-            alert.setHeaderText(null);
-            alert.setContentText("You currently own the book you can not place a hold");
-            alert.showAndWait();
-            return;
-        }
-        for(ObservableList<String> d: data){
-            if(d.get(0).equals(client.getUsername())) {
+        synchronized(client.o) {
+            if (item.getCurrent().equals("")) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Admin Message");
                 alert.setHeaderText(null);
-                alert.setContentText("You are already at position " + d.get(1) + " in the hold");
+                alert.setContentText("There is currently noone checking out this book, so you cannot place a hold");
                 alert.showAndWait();
                 return;
             }
+            if (item.getCurrent().equals(client.getUsername())) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Admin Message");
+                alert.setHeaderText(null);
+                alert.setContentText("You currently own the book you can not place a hold");
+                alert.showAndWait();
+                return;
+            }
+            for (ObservableList<String> d : data) {
+                if (d.get(0).equals(client.getUsername())) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Admin Message");
+                    alert.setHeaderText(null);
+                    alert.setContentText("You are already at position " + d.get(1) + " in the hold");
+                    alert.showAndWait();
+                    return;
+                }
+            }
+            String s = item.getHolders();
+            s = s.length() != 0 ? (s += ", " + client.getUsername()) : client.getUsername();
+            item.setHolders(s);
+            client.sendToServer("hold", item);
+            ObservableList<String> row = FXCollections.observableArrayList();
+            row.addAll(client.getUsername(), Integer.toString(i + 1));
+            i++;
+            data.add(row);
+            holdViewer.refresh();
         }
-        String s = item.getHolders();
-        s = s.length() != 0 ? (s += ", " + client.getUsername()) : client.getUsername();
-        item.setHolders(s);
-        client.sendToServer("hold", item);
-        ObservableList<String> row = FXCollections.observableArrayList();
-        row.addAll(client.getPreviousNames().get(i), Integer.toString(i+1));
-        i++;
-        data.add(row);
+    }
+    public void refreshTable(){
         holdViewer.refresh();
     }
     @FXML
     public void cancelHold(){
-        ArrayList<String> s = new ArrayList<String>(Arrays.asList(item.getHolders().split(", ")));
-        if(!s.contains(client.getUsername())){
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Admin Message");
-            alert.setHeaderText(null);
-            alert.setContentText("You currently do not have a hold on this item");
-            alert.showAndWait();
-            return;
-        }
-        s.remove(client.getUsername());
-        item.setHolders(String.join(", ", s));
-        client.sendToServer("hold", item);
-        data = FXCollections.observableArrayList();
-        if(!item.getHolders().equals("")) {
-            for (i = 0; i < s.size(); i++) {
-                ObservableList<String> row = FXCollections.observableArrayList();
-                row.addAll(item.getHolders().split(", ")[i], Integer.toString(i + 1));
-                data.add(row);
+        synchronized(client.o) {
+            ArrayList<String> s = new ArrayList<String>(Arrays.asList(item.getHolders().split(", ")));
+            if (!s.contains(client.getUsername())) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Admin Message");
+                alert.setHeaderText(null);
+                alert.setContentText("You currently do not have a hold on this item");
+                alert.showAndWait();
+                return;
             }
-            if (data.size() > 0) {
-                holdViewer.setItems(data);
+            s.remove(client.getUsername());
+            item.setHolders(String.join(", ", s));
+            client.sendToServer("hold", item);
+            data = FXCollections.observableArrayList();
+            if (!item.getHolders().equals("")) {
+                for (i = 0; i < s.size(); i++) {
+                    ObservableList<String> row = FXCollections.observableArrayList();
+                    row.addAll(item.getHolders().split(", ")[i], Integer.toString(i + 1));
+                    data.add(row);
+                }
+                if (data.size() > 0) {
+                    holdViewer.setItems(data);
+                }
             }
+            holdViewer.refresh();
         }
-        holdViewer.refresh();
     }
     @FXML
     public void minimize(){

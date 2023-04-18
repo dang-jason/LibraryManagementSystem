@@ -9,6 +9,7 @@
 package client;
 
 import controllers.dashboardController;
+import controllers.holderController;
 import data.Item;
 
 import databases.userDatabase;
@@ -43,6 +44,7 @@ public class Client extends Application {
     private ObservableList<String> previousNames = FXCollections.observableArrayList();
     private ObservableList<String> previousDates = FXCollections.observableArrayList();
     private dashboardController dbController;
+    private holderController holdController = null;
     public static Object o = new Object();
     public Client(){}
     public Client(int empty){
@@ -125,6 +127,7 @@ public class Client extends Application {
                                             if (i.getName().equals(itemFromServer.getName())) {
                                                 i.setCurrent(itemFromServer.getCurrent());
                                                 dbController.refreshTable();
+                                                if(holdController != null) holdController.refreshTable();
                                                 break;
                                             }
                                         }
@@ -134,6 +137,7 @@ public class Client extends Application {
                                             if (i.getName().equals(itemFromServer.getName())) {
                                                 i.setCurrent(itemFromServer.getCurrent());
                                                 dbController.refreshTable();
+                                                if(holdController != null) holdController.refreshTable();
                                                 break;
                                             }
                                         }
@@ -178,6 +182,9 @@ public class Client extends Application {
     public void setUsername(String username){this.username = username;}
     public void setDbController(dashboardController dbController) {
         this.dbController = dbController;
+    }
+    public void setHoldController(holderController holdController){
+        this.holdController = holdController;
     }
     public ObservableList<Item> getBooks() {
         return books;

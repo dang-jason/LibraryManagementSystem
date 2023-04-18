@@ -431,6 +431,7 @@ public class dashboardController implements Initializable {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("../fxmls/holdViewer.fxml"));
         Parent root = loader.load();
         holderController controller = loader.getController();
+        client.setHoldController(controller);
         controller.setItem(item);
         controller.setClient(this.client);
         Scene newScene = new Scene(root);
