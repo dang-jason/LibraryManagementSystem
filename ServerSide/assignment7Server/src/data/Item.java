@@ -20,6 +20,7 @@ public class Item implements Serializable{
     protected String returnDate;
     protected String checkoutDate;
     protected String previousDates;
+    protected String holders;
 
     public Item(){
         this.itemType = "";
@@ -32,6 +33,15 @@ public class Item implements Serializable{
         this.returnDate = "";
         this.checkoutDate = "";
         this.previousDates = "";
+        this.holders = "";
+    }
+
+    public String getHolders() {
+        return holders;
+    }
+
+    public void setHolders(String holders) {
+        this.holders = holders;
     }
 
     public String getCurrent() {

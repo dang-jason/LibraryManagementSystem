@@ -102,8 +102,8 @@ public class Client extends Application {
             public void run(){
                 String query;
                 Item itemFromServer;
-                while(!socket.isClosed()){
-                    try {
+                try {
+                    while(!socket.isClosed()){
                         while((query = (String) fromServer.readObject()) != null) {
                             itemFromServer = (Item) fromServer.readObject();
                             if(query.equals("add")){
@@ -141,10 +141,10 @@ public class Client extends Application {
                                 }
                             }
                         }
-                    } catch (IOException | ClassNotFoundException e) {
-                        System.out.println("Error in receiving item from server");
-                        closeEverything();
                     }
+                } catch (IOException | ClassNotFoundException e) {
+                    System.out.println("Error in receiving item from server");
+                    closeEverything();
                 }
             }
         }).start();

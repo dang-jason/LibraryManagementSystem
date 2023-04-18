@@ -159,6 +159,7 @@ public class loginController implements Initializable {
     @FXML
     public void exit(ActionEvent event){
         client.sendToServer("exit", null);
+        client.closeEverything();
         ((Stage)((Node)event.getSource()).getScene().getWindow()).close();
     }
 }

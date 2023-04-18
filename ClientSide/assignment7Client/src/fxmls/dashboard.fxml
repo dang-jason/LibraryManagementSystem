@@ -56,7 +56,8 @@
             <ImageView fx:id="imageDisplay" fitHeight="233.0" fitWidth="200.0" layoutX="57.0" layoutY="27.0" pickOnBounds="true" />
             <Button fx:id="checkoutBtn" layoutX="36.0" layoutY="565.0" mnemonicParsing="false" onAction="#checkoutItem" prefHeight="27.0" prefWidth="114.0" text="Checkout" />
             <Button layoutX="164.0" layoutY="565.0" mnemonicParsing="false" onAction="#returnItem" prefHeight="27.0" prefWidth="114.0" text="Return" />
-            <Button layoutX="79.0" layoutY="614.0" mnemonicParsing="false" onAction="#showPreviousCheckouts" text="View Previous Checkouts" />
+            <Button layoutX="77.0" layoutY="634.0" mnemonicParsing="false" onAction="#showPreviousCheckouts" prefHeight="27.0" prefWidth="160.0" text="View Previous Checkouts" />
+            <Button layoutX="77.0" layoutY="600.0" mnemonicParsing="false" onAction="#showHolders" prefHeight="27.0" prefWidth="160.0" text="View Current Holds" />
          </children>
       </AnchorPane>
    </left>
