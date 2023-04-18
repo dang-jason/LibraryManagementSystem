@@ -32,7 +32,10 @@ public class Client extends Application {
     private ObservableList<Item> books = FXCollections.observableArrayList();
     private ObservableList<Item> games = FXCollections.observableArrayList();
     private ObservableList<Item> checkout = FXCollections.observableArrayList();
+    private ObservableList<String> previousNames = FXCollections.observableArrayList();
+    private ObservableList<String> previousDates = FXCollections.observableArrayList();
     private dashboardController dbController;
+    public static Object o = new Object();
     public Client(){}
     public Client(int empty){
         userDatabase.connectDatabase();
@@ -71,6 +74,8 @@ public class Client extends Application {
             applicationStage.setX(event.getScreenX() - x);
             applicationStage.setY(event.getScreenY() - y);
         });
+        applicationStage.setX(390);
+        applicationStage.setY(155);
         applicationStage.initStyle(StageStyle.TRANSPARENT);
         applicationStage.setScene(new Scene(root));
         applicationStage.show();
@@ -94,7 +99,6 @@ public class Client extends Application {
                         while((query = (String) fromServer.readObject()) != null) {
                             itemFromServer = (Item) fromServer.readObject();
                             if(query.equals("add")){
-                                //do something to display the items
                                 if(itemFromServer.getItemType().equals("book")){
                                     itemFromServer.setItemType("Book");
                                     books.add(itemFromServer);
@@ -107,9 +111,7 @@ public class Client extends Application {
                                     checkout.add(itemFromServer);
                                 }
                             }else if(query.equals("update")) {
-                                //do something to update the items
                                 if (!itemFromServer.getCurrent().equals(username)) {
-                                    System.out.println(itemFromServer + " HAS TO BE UPDATED");
                                     if (itemFromServer.getItemType().equals("Book")) {
                                         for (Item i : books) {
                                             if (i.getName().equals(itemFromServer.getName())) {
@@ -133,29 +135,29 @@ public class Client extends Application {
                         }
                     } catch (IOException | ClassNotFoundException e) {
                         System.out.println("Error in receiving item from server");
-                        closeEverything(socket, fromServer, toServer);
+                        closeEverything();
                     }
                 }
             }
         }).start();
     }
     public void sendToServer(String query, Item item) {
-        System.out.println("Sending to server: " + item);
         try {
                 toServer.reset();
                 toServer.writeUnshared(query);
                 toServer.flush();
-                toServer.reset();
-                toServer.writeUnshared(item);
-                toServer.flush();
-                System.out.println("Item has been sent to server");
+                if(item != null) {
+                    toServer.reset();
+                    toServer.writeUnshared(item);
+                    toServer.flush();
+                }
         }catch(Exception e){
             System.out.println("Error in sending to server");
-            closeEverything(socket, fromServer, toServer);
+            closeEverything();
         }
     }
 
-    public void closeEverything(Socket socket, ObjectInputStream fromServer, ObjectOutputStream toServer){
+    public void closeEverything(){
         try{
             if(fromServer != null) fromServer.close();
             if(toServer != null) toServer.close();
@@ -179,5 +181,21 @@ public class Client extends Application {
 
     public ObservableList<Item> getCheckout() {
         return checkout;
+    }
+
+    public ObservableList<String> getPreviousNames() {
+        return previousNames;
+    }
+
+    public ObservableList<String> getPreviousDates() {
+        return previousDates;
+    }
+
+    public void setPreviousNames(ObservableList<String> previousNames) {
+        this.previousNames = previousNames;
+    }
+
+    public void setPreviousDates(ObservableList<String> previousDates) {
+        this.previousDates = previousDates;
     }
 }

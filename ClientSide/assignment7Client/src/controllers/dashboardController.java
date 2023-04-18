@@ -3,6 +3,7 @@ package controllers;
 import client.Client;
 import data.Item;
 import databases.userDatabase;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,12 +18,16 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 public class dashboardController implements Initializable {
@@ -69,7 +74,8 @@ public class dashboardController implements Initializable {
     private TableColumn<Item, String> itemDateCheckout;
     @FXML
     private TableColumn<Item, String> itemReturnDate;
-
+    private double x = 0;
+    private double y = 0;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -151,8 +157,8 @@ public class dashboardController implements Initializable {
             return cell ;
         });
         itemCheckoutType.setCellValueFactory(new PropertyValueFactory<Item, String>("itemType"));
-//        itemDateCheckout.setCellValueFactory(new PropertyValueFactory<Item, String>(""));
-//        itemReturnDate.setCellValueFactory(new PropertyValueFactory<Item, String>(""));
+        itemDateCheckout.setCellValueFactory(new PropertyValueFactory<Item, String>("checkoutDate"));
+        itemReturnDate.setCellValueFactory(new PropertyValueFactory<Item, String>("returnDate"));
     }
 
     public void setClient(Client client){this.client = client;}
@@ -170,6 +176,16 @@ public class dashboardController implements Initializable {
         Scene scene = new Scene(root);
         Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         stage.setScene(scene);
+        root.setOnMousePressed((MouseEvent e) ->{
+            x = e.getSceneX();
+            y = e.getSceneY();
+        });
+        root.setOnMouseDragged((MouseEvent e) ->{
+            stage.setX(e.getScreenX() - x);
+            stage.setY(e.getScreenY() - y);
+        });
+        stage.setX(390);
+        stage.setY(155);
         stage.show();
     }
     @FXML void getItem(MouseEvent event){
@@ -180,137 +196,181 @@ public class dashboardController implements Initializable {
         }else if(((TableView)event.getSource()).getId().equals("gameTable")){
             item = gameTable.getSelectionModel().getSelectedItem();
             if(item == null) return;
+
         }else if(((TableView)event.getSource()).getId().equals("checkoutTable")){
             item = checkoutTable.getSelectionModel().getSelectedItem();
             if(item == null) return;
+
         }
         if(item != null && userDatabase.getImage(item.getName()) != null) {
             InputStream inputStream = new ByteArrayInputStream(userDatabase.getImage(item.getName()));
             Image image = new Image(inputStream);
             imageDisplay.setImage(image);
+            client.setPreviousNames(FXCollections.observableArrayList(item.getPrevious().split(", ")));
+            client.setPreviousDates(FXCollections.observableArrayList(item.getPreviousDates().split(", ")));
         }
     }
     @FXML
     public void checkoutItem(){
-        ObservableList<Item> books = bookTable.getSelectionModel().getSelectedItems();
-        Alert alert;
-        for(Item i : books) {
-            if(i.getCurrent().equals("")) {
-                i.setCurrent(client.getUsername());
-                bookTable.refresh();
-                client.getCheckout().add(i);
-                checkoutTable.refresh();
-                client.sendToServer("checkout", i);
-            }
-            else {
-                alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Admin Message");
-                alert.setHeaderText(null);
-                if(i.getCurrent().equals(client.getUsername())){
-                 alert.setContentText("Sorry, you are already checking out " + i.getName());
-                }else {
-                    alert.setContentText("Sorry " + i.getName() + " is already checked out by " + i.getCurrent());
+        synchronized(client.o) {
+            ObservableList<Item> books = bookTable.getSelectionModel().getSelectedItems();
+            Alert alert;
+            for (Item i : books) {
+                if (i.getCurrent().equals("")) {
+                    i.setCurrent(client.getUsername());
+                    i.setReturnDate(LocalDate.now().plusDays(14).format(DateTimeFormatter.ofPattern("MM/dd/yyyy")));
+                    i.setCheckoutDate(LocalDate.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy")));
+                    client.getCheckout().add(i);
+                    refreshTable();
+                    client.sendToServer("checkout", i);
+                } else {
+                    alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Admin Message");
+                    alert.setHeaderText(null);
+                    if (i.getCurrent().equals(client.getUsername())) {
+                        alert.setContentText("Sorry, you are already checking out " + i.getName());
+                    } else {
+                        alert.setContentText("Sorry " + i.getName() + " is already checked out by " + i.getCurrent());
+                    }
+                    alert.showAndWait();
                 }
-                alert.showAndWait();
             }
-        }
-        bookTable.getSelectionModel().clearSelection();
-        ObservableList<Item> games = gameTable.getSelectionModel().getSelectedItems();
-        for(Item i : games) {
-            if(i.getCurrent().equals("")) {
-                i.setCurrent(client.getUsername());
-                gameTable.refresh();
-                client.getCheckout().add(i);
-                checkoutTable.refresh();
-                client.sendToServer("checkout", i);
+            bookTable.getSelectionModel().clearSelection();
+            ObservableList<Item> games = gameTable.getSelectionModel().getSelectedItems();
+            for (Item i : games) {
+                if (i.getCurrent().equals("")) {
+                    i.setCurrent(client.getUsername());
+                    i.setReturnDate(LocalDate.now().plusDays(14).format(DateTimeFormatter.ofPattern("MM/dd/yyyy")));
+                    i.setCheckoutDate(LocalDate.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy")));
+                    client.getCheckout().add(i);
+                    refreshTable();
+                    client.sendToServer("checkout", i);
+                } else {
+                    alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Admin Message");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Sorry " + i.getName() + " is already checked out by " + i.getCurrent());
+                    alert.showAndWait();
+                }
             }
-            else {
+            gameTable.getSelectionModel().clearSelection();
+            ObservableList<Item> checkout = checkoutTable.getSelectionModel().getSelectedItems();
+            if (checkout.size() > 0) {
                 alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Admin Message");
                 alert.setHeaderText(null);
-                alert.setContentText("Sorry " + i.getName() + " is already checked out by " + i.getCurrent());
+                alert.setContentText("Sorry these are items you currently have checked out. Do you mean to return?");
                 alert.showAndWait();
             }
+            checkoutTable.getSelectionModel().clearSelection();
         }
-        gameTable.getSelectionModel().clearSelection();
-        ObservableList<Item> checkout = checkoutTable.getSelectionModel().getSelectedItems();
-        if(checkout.size() > 0){
-            alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Admin Message");
-            alert.setHeaderText(null);
-            alert.setContentText("Sorry these are items you currently have checked out. Do you mean to return?");
-            alert.showAndWait();
-        }
-        checkoutTable.getSelectionModel().clearSelection();
     }
     @FXML
     public void returnItem(){
-        ObservableList<Item> books = bookTable.getSelectionModel().getSelectedItems();
-        Alert alert;
-        for(Item i : books) {
-            if(i.getCurrent().equals(client.getUsername())) {
-                String s = i.getPrevious();
-                if(s.length() != 0){
-                    s += ", " + i.getCurrent();
-                }else{
-                    s = i.getCurrent();
+        synchronized (client.o) {
+            ObservableList<Item> books = bookTable.getSelectionModel().getSelectedItems();
+            Alert alert;
+            for (Item i : books) {
+                if (i.getCurrent().equals(client.getUsername())) {
+                    String s = i.getPrevious();
+                    s = s.length() != 0 ? (s += ", " + i.getCurrent()) : i.getCurrent();
+                    String p = i.getPreviousDates();
+                    p = p.length() != 0 ? (p += ", " + LocalDate.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy"))) : LocalDate.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy"));
+                    i.setCurrent("");
+                    i.setPrevious(s);
+                    i.setCheckoutDate("");
+                    i.setReturnDate("");
+                    i.setPreviousDates(p);
+                    bookTable.refresh();
+                    client.getCheckout().remove(i);
+                    checkoutTable.refresh();
+                    client.sendToServer("return", i);
+                } else {
+                    alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Admin Message");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Sorry, your book " + i.getName() + " does not belong to us.");
+                    alert.showAndWait();
                 }
+            }
+            bookTable.getSelectionModel().clearSelection();
+            ObservableList<Item> games = gameTable.getSelectionModel().getSelectedItems();
+            for (Item i : games) {
+                if (i.getCurrent().equals(client.getUsername())) {
+                    String s = i.getPrevious();
+                    s = s.length() != 0 ? (s += ", " + i.getCurrent()) : i.getCurrent();
+                    String p = i.getPreviousDates();
+                    p = p.length() != 0 ? (p += ", " + LocalDate.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy"))) : LocalDate.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy"));
+                    i.setCurrent("");
+                    i.setPrevious(s);
+                    i.setCheckoutDate("");
+                    i.setReturnDate("");
+                    i.setPreviousDates(p);
+                    gameTable.refresh();
+                    client.getCheckout().remove(i);
+                    checkoutTable.refresh();
+                    client.sendToServer("return", i);
+                } else {
+                    alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Admin Message");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Sorry, it is not possible for you to return a book you do not currently own.");
+                    alert.showAndWait();
+                }
+            }
+            gameTable.getSelectionModel().clearSelection();
+            ObservableList<Item> checkout = checkoutTable.getSelectionModel().getSelectedItems();
+            for (Item i : checkout) {
+                String s = i.getPrevious();
+                s = s.length() != 0 ? (s += ", " + i.getCurrent()) : i.getCurrent();
+                String p = i.getPreviousDates();
+                p = p.length() != 0 ? (p += ", " + LocalDate.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy"))) : LocalDate.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy"));
                 i.setCurrent("");
-                bookTable.refresh();
+                i.setPrevious(s);
+                i.setCheckoutDate("");
+                i.setReturnDate("");
+                i.setPreviousDates(p);
                 client.getCheckout().remove(i);
-                checkoutTable.refresh();
+                refreshTable();
                 client.sendToServer("return", i);
             }
-            else {
-                alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Admin Message");
-                alert.setHeaderText(null);
-                alert.setContentText("Sorry, your book" + i.getName() + " does not belong to us.");
-                alert.showAndWait();
-            }
+            checkoutTable.getSelectionModel().clearSelection();
         }
-        bookTable.getSelectionModel().clearSelection();
-        ObservableList<Item> games = gameTable.getSelectionModel().getSelectedItems();
-        for(Item i : games) {
-            String s = i.getPrevious();
-            if(s.length() != 0){
-                s += ", " + i.getCurrent();
-            }else{
-                s = i.getCurrent();
-            }
-            if(i.getCurrent().equals(client.getUsername())) {
-                i.setCurrent("");
-                gameTable.refresh();
-                client.getCheckout().remove(i);
-                checkoutTable.refresh();
-                client.sendToServer("return", i);
-            }
-            else {
-                alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Admin Message");
-                alert.setHeaderText(null);
-                alert.setContentText("Sorry, it is not possible for you to return a book you do not currently own.");
-                alert.showAndWait();
-            }
-        }
-        gameTable.getSelectionModel().clearSelection();
-        ObservableList<Item> checkout = checkoutTable.getSelectionModel().getSelectedItems();
-        for(Item i : checkout) {
-            String s = i.getPrevious();
-            if(s.length() != 0){
-                s += ", " + i.getCurrent();
-            }else{
-                s = i.getCurrent();
-            }
-            i.setCurrent("");
-            bookTable.refresh();
-            gameTable.refresh();
-            client.getCheckout().remove(i);
-            checkoutTable.refresh();
-            client.sendToServer("return", i);
-        }
-        checkoutTable.getSelectionModel().clearSelection();
     }
+
+    public void showPreviousCheckouts(ActionEvent event) throws IOException {
+        if(bookTable.getSelectionModel().getSelectedItem() != null || gameTable.getSelectionModel().getSelectedItem() != null || checkoutTable.getSelectionModel().getSelectedItem() != null) {
+            bookTable.getSelectionModel().clearSelection();
+            gameTable.getSelectionModel().clearSelection();
+            checkoutTable.getSelectionModel().clearSelection();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("../fxmls/previousCheckouts.fxml"));
+            Parent root = loader.load();
+            previousCheckoutController controller = loader.getController();
+            controller.setClient(this.client);
+            Scene newScene = new Scene(root);
+            Stage newStage = new Stage();
+            newStage.initModality(Modality.WINDOW_MODAL);
+            newStage.initOwner((Stage) ((Node) event.getSource()).getScene().getWindow());
+            newStage.initStyle(StageStyle.TRANSPARENT);
+            newStage.setScene(newScene);
+            root.setOnMousePressed((MouseEvent e) -> {
+                x = e.getSceneX();
+                y = e.getSceneY();
+            });
+            root.setOnMouseDragged((MouseEvent e) -> {
+                newStage.setX(e.getScreenX() - x);
+                newStage.setY(e.getScreenY() - y);
+            });
+            newStage.show();
+        } else{
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Admin Message");
+            alert.setHeaderText(null);
+            alert.setContentText("Sorry please select an item to view checkout history");
+            alert.showAndWait();
+        }
+    }
+
     public void refreshTable(){
         bookTable.refresh();
         gameTable.refresh();
@@ -322,7 +382,8 @@ public class dashboardController implements Initializable {
         stage.setIconified(true);
     }
     @FXML
-    public void exit(){
-        System.exit(0);
+    public void exit(ActionEvent event){
+        client.sendToServer("exit", null);
+        ((Stage)((Node)event.getSource()).getScene().getWindow()).close();
     }
 }

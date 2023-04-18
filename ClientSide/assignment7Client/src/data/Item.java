@@ -10,6 +10,9 @@ public class Item implements Serializable{
     protected String summary;
     protected String current;
     protected String previous;
+    protected String returnDate;
+    protected String checkoutDate;
+    protected String previousDates;
 
     public Item(){
         this.itemType = "";
@@ -19,6 +22,9 @@ public class Item implements Serializable{
         this.summary = "";
         this.current = "";
         this.previous ="";
+        this.returnDate = "";
+        this.checkoutDate = "";
+        this.previousDates = "";
     }
 
     public String getCurrent() {
@@ -37,7 +43,31 @@ public class Item implements Serializable{
         this.previous = previous;
     }
 
-    public Item(String itemType, String name, String creator, int pages_year, String summary, String current, String previous){
+    public String getReturnDate() {
+        return returnDate;
+    }
+
+    public void setReturnDate(String returnDate) {
+        this.returnDate = returnDate;
+    }
+
+    public String getCheckoutDate() {
+        return checkoutDate;
+    }
+
+    public void setCheckoutDate(String checkoutDate) {
+        this.checkoutDate = checkoutDate;
+    }
+
+    public String getPreviousDates() {
+        return previousDates;
+    }
+
+    public void setPreviousDates(String previousDates) {
+        this.previousDates = previousDates;
+    }
+
+    public Item(String itemType, String name, String creator, int pages_year, String summary, String current, String previous, String returnDate, String checkoutDate, String previousDates){
         this.itemType = itemType;
         this.name = name;
         this.creator = creator;
@@ -45,6 +75,9 @@ public class Item implements Serializable{
         this.summary = summary;
         this.current = current;
         this.previous = previous;
+        this.returnDate = returnDate;
+        this.checkoutDate = checkoutDate;
+        this.previousDates = previousDates;
     }
 
     @Override
@@ -57,6 +90,9 @@ public class Item implements Serializable{
                 ", summary='" + summary + '\'' +
                 ", current='" + current + '\'' +
                 ", previous='" + previous + '\'' +
+                ", returnDate='" + returnDate + '\'' +
+                ", checkoutDate='" + checkoutDate + '\'' +
+                ", previousDates='" + previousDates + '\'' +
                 '}';
     }
 

@@ -1,6 +1,9 @@
 package data;
 
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 public class Item implements Serializable{
     protected String itemType;
     protected String name;
@@ -9,6 +12,8 @@ public class Item implements Serializable{
     protected String summary;
     protected String current;
     protected String previous;
+    protected String returnDate;
+    protected String checkoutDate;
 
     public Item(){
         this.itemType = "";
@@ -18,6 +23,8 @@ public class Item implements Serializable{
         this.summary = "";
         this.current = "";
         this.previous ="";
+        this.returnDate = "";
+        this.checkoutDate = "";
     }
 
     public String getCurrent() {
@@ -36,7 +43,23 @@ public class Item implements Serializable{
         this.previous = previous;
     }
 
-    public Item(String itemType, String name, String creator, int pages_year, String summary, String current, String previous){
+    public String getReturnDate() {
+        return returnDate;
+    }
+
+    public void setReturnDate(String returnDate) {
+        this.returnDate = returnDate;
+    }
+
+    public String getCheckoutDate() {
+        return checkoutDate;
+    }
+
+    public void setCheckoutDate(String checkoutDate) {
+        this.checkoutDate = checkoutDate;
+    }
+
+    public Item(String itemType, String name, String creator, int pages_year, String summary, String current, String previous, String returnDate, String checkoutDate){
         this.itemType = itemType;
         this.name = name;
         this.creator = creator;
@@ -44,6 +67,8 @@ public class Item implements Serializable{
         this.summary = summary;
         this.current = current;
         this.previous = previous;
+        this.returnDate = returnDate;
+        this.checkoutDate = checkoutDate;
     }
 
     @Override

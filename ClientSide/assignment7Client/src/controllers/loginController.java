@@ -80,8 +80,8 @@ public class loginController implements Initializable {
                     });
                     Scene scene = new Scene(root);
                     stage.setScene(scene);
-                    stage.setX(325);
-                    stage.setY(200);
+                    stage.setX(200);
+                    stage.setY(75);
                     stage.show();
                 }else{
                     alert = new Alert(Alert.AlertType.ERROR);
@@ -150,7 +150,8 @@ public class loginController implements Initializable {
     }
 
     @FXML
-    public void exit(){
-        System.exit(0);
+    public void exit(ActionEvent event){
+        client.sendToServer("exit", null);
+        ((Stage)((Node)event.getSource()).getScene().getWindow()).close();
     }
 }
