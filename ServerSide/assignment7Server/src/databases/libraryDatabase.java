@@ -40,7 +40,6 @@ public class libraryDatabase {
         mongo = MongoClients.create(URI);
         database = mongo.getDatabase(DB);
         collection = database.getCollection(COLLECTION);
-//        ping();
 //        parseDB();
 //        update();
     }
@@ -70,7 +69,7 @@ public class libraryDatabase {
                 Document doc = cursor.next();
                 String pages_year;
                 if(doc.containsKey("pages")) pages_year = "pages"; else pages_year = "year";
-                Item i = new Item((String)doc.get("itemType"),(String)doc.get("name"), (String)doc.get("creator"), (Integer)doc.get(pages_year), (String)doc.get("summary"), (String)doc.get("currentCheckout"), (String)doc.get("previousCheckouts"),(String)doc.get("returnDate"), (String)doc.get("checkoutDate"), (String)doc.get("previousDates"));
+                Item i = new Item((String)doc.get("itemType"),(String)doc.get("name"), (String)doc.get("creator"), (Integer)doc.get(pages_year), (String)doc.get("summary"), (String)doc.get("currentCheckout"), (String)doc.get("previousCheckouts"),(String)doc.get("returnDate"), (String)doc.get("checkoutDate"), (String)doc.get("previousDates"), (String) doc.get("holders"));
                 items.add(i);
             }
             return items;

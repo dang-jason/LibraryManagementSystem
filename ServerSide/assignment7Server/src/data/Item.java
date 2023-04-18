@@ -29,19 +29,64 @@ public class Item implements Serializable{
         this.pages_year = 0;
         this.summary = "";
         this.current = "";
-        this.previous ="";
+        this.previous = "";
         this.returnDate = "";
         this.checkoutDate = "";
         this.previousDates = "";
         this.holders = "";
     }
-
-    public String getHolders() {
-        return holders;
+    public Item(String itemType, String name, String creator, int pages_year, String summary, String current, String previous, String returnDate, String checkoutDate, String previousDates, String holders) {
+        this.itemType = itemType;
+        this.name = name;
+        this.creator = creator;
+        this.pages_year = pages_year;
+        this.summary = summary;
+        this.current = current;
+        this.previous = previous;
+        this.returnDate = returnDate;
+        this.checkoutDate = checkoutDate;
+        this.previousDates = previousDates;
+        this.holders = holders;
     }
 
-    public void setHolders(String holders) {
-        this.holders = holders;
+    public String getItemType() {
+        return itemType;
+    }
+
+    public void setItemType(String itemType) {
+        this.itemType = itemType;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator;
+    }
+
+    public int getPages_year() {
+        return pages_year;
+    }
+
+    public void setPages_year(int pages_year) {
+        this.pages_year = pages_year;
+    }
+
+    public String getSummary() {
+        return summary;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
     }
 
     public String getCurrent() {
@@ -84,72 +129,11 @@ public class Item implements Serializable{
         this.previousDates = previousDates;
     }
 
-    public Item(String itemType, String name, String creator, int pages_year, String summary, String current, String previous, String returnDate, String checkoutDate, String previousDates){
-        this.itemType = itemType;
-        this.name = name;
-        this.creator = creator;
-        this.pages_year = pages_year;
-        this.summary = summary;
-        this.current = current;
-        this.previous = previous;
-        this.returnDate = returnDate;
-        this.checkoutDate = checkoutDate;
-        this.previousDates = previousDates;
+    public String getHolders() {
+        return holders;
     }
 
-    @Override
-    public String toString() {
-        return "Item{" +
-                "itemType='" + itemType + '\'' +
-                ", name='" + name + '\'' +
-                ", creator='" + creator + '\'' +
-                ", pages_year=" + pages_year +
-                ", summary='" + summary + '\'' +
-                ", current='" + current + '\'' +
-                ", previous='" + previous + '\'' +
-                ", returnDate='" + returnDate + '\'' +
-                ", checkoutDate='" + checkoutDate + '\'' +
-                ", previousDates='" + previousDates + '\'' +
-                '}';
-    }
-
-    public String getItemType() {
-        return itemType;
-    }
-
-    public void setItemType(String itemType) {
-        this.itemType = itemType;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getCreator() {
-        return creator;
-    }
-
-    public void setCreator(String creator) {
-        this.creator = creator;
-    }
-
-    public int getPages_year() {
-        return pages_year;
-    }
-
-    public void setPages_year(int pages_year) {
-        this.pages_year = pages_year;
-    }
-
-    public String getSummary() {
-        return summary;
-    }
-
-    public void setSummary(String summary) {
-        this.summary = summary;
+    public void setHolders(String holders) {
+        this.holders = holders;
     }
 }

@@ -18,6 +18,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Observer;
 import java.util.Observable;
 
@@ -45,21 +46,12 @@ class ClientHandler implements Runnable, Observer {
 
     protected void sendToClient(String query, Item item) {
         try {
-            if(query.equals("add")) {
                 toClient.reset();
-                toClient.writeUnshared("add");
+                toClient.writeUnshared(query);
                 toClient.flush();
                 toClient.reset();
                 toClient.writeUnshared(item);
                 toClient.flush();
-            }else if(query.equals("update")){
-                toClient.reset();
-                toClient.writeUnshared("update");
-                toClient.flush();
-                toClient.reset();
-                toClient.writeUnshared(item);
-                toClient.flush();
-            }
         }catch(Exception e){
             e.printStackTrace();
             System.out.println("Error in sending to client");
@@ -79,6 +71,7 @@ class ClientHandler implements Runnable, Observer {
                 while((query = (String) fromClient.readObject()) != null) {
                     if(query.equals("exit")){
                         closeEverything(this.socket, this.fromClient, this.toClient);
+                        server.deleteObserver(this);
                         clientHandlers.remove(this);
                         break;
                     }
@@ -91,7 +84,6 @@ class ClientHandler implements Runnable, Observer {
                                 Updates.set("returnDate", item.getReturnDate()),
                                 Updates.set("checkoutDate", item.getCheckoutDate())
                         );
-                        Document doc = libraryDatabase.getCollection().find(Filters.eq("name", item.getName())).first();
                         libraryDatabase.getCollection().updateOne(filter, update);
                     }else if(query.equals("return")){
                         server.processRequest(item);
@@ -105,6 +97,9 @@ class ClientHandler implements Runnable, Observer {
                         );
                         Document doc = libraryDatabase.getCollection().find(Filters.eq("name", item.getName())).first();
                         libraryDatabase.getCollection().updateOne(filter, update);
+                    }else if(query.equals("hold")){
+                        server.processRequest(item);
+                        libraryDatabase.getCollection().updateOne(Filters.eq("name", item.getName()), Updates.set("holders", item.getHolders()));
                     }
                 }
             } catch(IOException | ClassNotFoundException e){
