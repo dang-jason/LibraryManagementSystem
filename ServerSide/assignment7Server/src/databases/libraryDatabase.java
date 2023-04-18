@@ -63,11 +63,10 @@ public class libraryDatabase {
                 Document doc = cursor.next();
                 String pages_year;
                 if(doc.containsKey("pages")) pages_year = "pages"; else pages_year = "year";
-                Item i = new Item((String)doc.get("itemType"),(String)doc.get("name"), (String)doc.get("creator"), (Integer)doc.get(pages_year), (String)doc.get("summary"), (String)doc.get("currentCheckout"), (String)doc.get("previousCheckout"));
+                Item i = new Item((String)doc.get("itemType"),(String)doc.get("name"), (String)doc.get("creator"), (Integer)doc.get(pages_year), (String)doc.get("summary"), (String)doc.get("currentCheckout"), (String)doc.get("previousCheckouts"),(String)doc.get("returnDate"), (String)doc.get("checkoutDate"), (String)doc.get("previousDates"));
                 items.add(i);
             }
             return items;
         }
     }
-
 }

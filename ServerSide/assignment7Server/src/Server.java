@@ -36,7 +36,6 @@ public class Server extends Observable {
         }
     }
     protected void processRequest(Item input) {
-        System.out.println("Item is being processed in the server to send to observables");
         try {
             this.setChanged();
             this.notifyObservers(input);

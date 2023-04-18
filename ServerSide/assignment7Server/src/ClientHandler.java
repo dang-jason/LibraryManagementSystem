@@ -1,4 +1,5 @@
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Updates;
 import data.Item;
 import com.google.gson.Gson;
 import databases.libraryDatabase;
@@ -13,9 +14,11 @@ import java.util.ArrayList;
 import java.util.Observer;
 import java.util.Observable;
 
+import static com.mongodb.client.model.Updates.combine;
+
 class ClientHandler implements Runnable, Observer {
     public static ArrayList<ClientHandler> clientHandlers = new ArrayList<>();
-    private Server server; // why do i need this
+    private Server server;
     private Socket socket;
     private ObjectInputStream fromClient;
     private ObjectOutputStream toClient;
@@ -64,20 +67,37 @@ class ClientHandler implements Runnable, Observer {
         String query;
         Item item;
         sendCatalog();
-        while(socket.isConnected()){
+        while(!socket.isClosed()){
             try{
-                //need to fix read from server if nothing to read -- do something with process request for updating
                 while((query = (String) fromClient.readObject()) != null) {
+                    if(query.equals("exit")){
+                        closeEverything(this.socket, this.fromClient, this.toClient);
+                        clientHandlers.remove(this);
+                        break;
+                    }
                     item = (Item) fromClient.readObject();
                     if(query.equals("checkout")){
                         server.processRequest(item);
+                        Bson filter = Filters.eq("name", item.getName());
+                        Bson update = combine(
+                                Updates.set("currentCheckout", item.getCurrent()),
+                                Updates.set("returnDate", item.getReturnDate()),
+                                Updates.set("checkoutDate", item.getCheckoutDate())
+                        );
                         Document doc = libraryDatabase.getCollection().find(Filters.eq("name", item.getName())).first();
-                        libraryDatabase.getCollection().updateOne(doc, new Document("$set", new Document("currentCheckout", item.getCurrent())));
+                        libraryDatabase.getCollection().updateOne(filter, update);
                     }else if(query.equals("return")){
                         server.processRequest(item);
+                        Bson filter = Filters.eq("name", item.getName());
+                        Bson update = combine(
+                                Updates.set("currentCheckout", item.getCurrent()),
+                                Updates.set("previousCheckouts", item.getPrevious()),
+                                Updates.set("returnDate", item.getReturnDate()),
+                                Updates.set("checkoutDate", item.getCheckoutDate()),
+                                Updates.set("previousDates", item.getPreviousDates())
+                        );
                         Document doc = libraryDatabase.getCollection().find(Filters.eq("name", item.getName())).first();
-                        libraryDatabase.getCollection().updateOne(doc, new Document("$set", new Document("previousCheckouts", item.getPrevious())));
-                        libraryDatabase.getCollection().updateOne(doc, new Document("$set", new Document("currentCheckout", item.getCurrent())));
+                        libraryDatabase.getCollection().updateOne(filter, update);
                     }
                 }
             } catch(IOException | ClassNotFoundException e){
