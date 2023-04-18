@@ -1,3 +1,10 @@
+/*
+ * EE422C Final Project submission by
+ * <Jason Dang>
+ * <jd52753>
+ * <17185>
+ * Spring 2023
+ */
 package data;
 
 import java.io.Serializable;

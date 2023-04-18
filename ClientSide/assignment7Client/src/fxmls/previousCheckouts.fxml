@@ -18,10 +18,10 @@
                <FontAwesomeIcon fill="WHITE" glyphName="MINUS" size="1.2em" />
            </graphic>
        </Button>
-      <TableView fx:id="checkoutViewer" layoutY="40.0" prefHeight="411.0" prefWidth="300.0">
+      <TableView fx:id="checkoutViewer" layoutY="40.0" prefHeight="410.0" prefWidth="300.0">
         <columns>
-          <TableColumn fx:id="previousName" prefWidth="171.0" text="Name" />
-          <TableColumn fx:id="previousDate" prefWidth="128.0" text="Date" />
+          <TableColumn fx:id="previousName" prefWidth="190.0" text="Name" />
+          <TableColumn fx:id="previousDate" prefWidth="109.0" text="Date" />
         </columns>
       </TableView>
    </children>
