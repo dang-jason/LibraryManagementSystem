@@ -181,6 +181,8 @@ public class dashboardController implements Initializable {
         userTag.setText("User: " + client.getUsername());
     }
     public void goBack(ActionEvent event) throws IOException {
+        client.sendToServer("exit", null);
+        client.closeEverything();
         Parent root = FXMLLoader.load(getClass().getResource("../fxmls/logins.fxml"));
         Scene scene = new Scene(root);
         Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();

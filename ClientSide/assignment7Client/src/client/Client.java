@@ -31,7 +31,7 @@ import java.util.ArrayList;
 
 public class Client extends Application {
     private static String host = "127.0.0.1";
-    private static int port = 4242;
+    private static int port = 2730;
     private ObjectInputStream fromServer;
     private ObjectOutputStream toServer;
     private Socket socket;
