@@ -10,6 +10,7 @@ package client;
 
 import controllers.dashboardController;
 import controllers.holderController;
+import controllers.previousCheckoutController;
 import data.Item;
 
 import databases.userDatabase;
@@ -45,6 +46,7 @@ public class Client extends Application {
     private ObservableList<String> previousDates = FXCollections.observableArrayList();
     private dashboardController dbController;
     private holderController holdController = null;
+    private previousCheckoutController checkoutController = null;
     public static Object o = new Object();
     public Client(){}
     public Client(int empty){
@@ -70,7 +72,7 @@ public class Client extends Application {
     public void start(Stage applicationStage) {
         Parent root;
         try {
-            root = FXMLLoader.load(getClass().getResource("../fxmls/logins.fxml"));
+            root = FXMLLoader.load(getClass().getResource("/fxmls/logins.fxml"));
         } catch(Exception e) {
             throw new RuntimeException(e);
         }
@@ -128,6 +130,7 @@ public class Client extends Application {
                                                 i.setCurrent(itemFromServer.getCurrent());
                                                 dbController.refreshTable();
                                                 if(holdController != null) holdController.refreshTable();
+                                                if(checkoutController != null) checkoutController.refreshTable();
                                                 break;
                                             }
                                         }
@@ -186,6 +189,11 @@ public class Client extends Application {
     public void setHoldController(holderController holdController){
         this.holdController = holdController;
     }
+
+    public void setPreviousController(previousCheckoutController previousController) {
+        this.checkoutController = previousController;
+    }
+
     public ObservableList<Item> getBooks() {
         return books;
     }

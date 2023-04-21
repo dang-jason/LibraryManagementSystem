@@ -59,6 +59,9 @@ public class previousCheckoutController implements Initializable {
         Stage stage = (Stage)minimize.getScene().getWindow();
         stage.setIconified(true);
     }
+    public void refreshTable(){
+        checkoutViewer.refresh();
+    }
     @FXML
     public void exit(ActionEvent event){
         ((Stage)((Node)event.getSource()).getScene().getWindow()).close();

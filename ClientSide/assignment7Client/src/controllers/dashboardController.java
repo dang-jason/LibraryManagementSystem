@@ -183,7 +183,7 @@ public class dashboardController implements Initializable {
     public void goBack(ActionEvent event) throws IOException {
         client.sendToServer("exit", null);
         client.closeEverything();
-        Parent root = FXMLLoader.load(getClass().getResource("../fxmls/logins.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/fxmls/logins.fxml"));
         Scene scene = new Scene(root);
         Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         stage.setScene(scene);
@@ -382,9 +382,10 @@ public class dashboardController implements Initializable {
             bookTable.getSelectionModel().clearSelection();
             gameTable.getSelectionModel().clearSelection();
             checkoutTable.getSelectionModel().clearSelection();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("../fxmls/previousCheckouts.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/previousCheckouts.fxml"));
             Parent root = loader.load();
             previousCheckoutController controller = loader.getController();
+            client.setPreviousController(controller);
             controller.setClient(this.client);
             Scene newScene = new Scene(root);
             Stage newStage = new Stage();
@@ -430,7 +431,7 @@ public class dashboardController implements Initializable {
         bookTable.getSelectionModel().clearSelection();
         gameTable.getSelectionModel().clearSelection();
         checkoutTable.getSelectionModel().clearSelection();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("../fxmls/holdViewer.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/holdViewer.fxml"));
         Parent root = loader.load();
         holderController controller = loader.getController();
         client.setHoldController(controller);

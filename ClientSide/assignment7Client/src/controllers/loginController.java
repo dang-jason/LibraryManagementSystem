@@ -69,7 +69,7 @@ public class loginController implements Initializable {
                     alert.setContentText("Successfully Login!");
                     alert.showAndWait();
                     //show dashboard
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("../fxmls/dashboard.fxml"));
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/dashboard.fxml"));
                     Parent root = loader.load();
                     dashboardController dashboardController = loader.getController();
                     client.setDbController(dashboardController);
