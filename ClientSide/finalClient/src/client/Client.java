@@ -28,7 +28,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.ArrayList;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class Client extends Application {
     private static String host = "52.146.16.67";
@@ -112,6 +113,19 @@ public class Client extends Application {
                         while((query = (String) fromServer.readObject()) != null) {
                             itemFromServer = (Item) fromServer.readObject();
                             if(query.equals("add")){
+                                if(!itemFromServer.getCurrent().equals("") && itemFromServer.getReturnDate().equals(LocalDate.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy")))){
+                                    String s = itemFromServer.getPrevious();
+                                    s = s.length() != 0 ? (s += ", " + itemFromServer.getCurrent()) : itemFromServer.getCurrent();
+                                    String p = itemFromServer.getPreviousDates();
+                                    p = p.length() != 0 ? (p += ", " + LocalDate.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy"))) : LocalDate.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy"));
+                                    itemFromServer.setCurrent("");
+                                    itemFromServer.setPrevious(s);
+                                    itemFromServer.setCheckoutDate("");
+                                    itemFromServer.setReturnDate("");
+                                    itemFromServer.setPreviousDates(p);
+                                    if(dbController != null) dbController.refreshTable();
+                                    sendToServer("return", itemFromServer);
+                                }
                                 if(itemFromServer.getItemType().equals("book")){
                                     itemFromServer.setItemType("Book");
                                     books.add(itemFromServer);
