@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.effect.Blend?>
+<?import javafx.scene.effect.SepiaTone?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="730.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.dashboardController">
+   <top>
+      <AnchorPane prefHeight="62.0" prefWidth="986.0" styleClass="mainlogin" stylesheets="@style.css" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="exit" mnemonicParsing="false" onAction="#exit" prefHeight="24.0" prefWidth="52.0" styleClass="exit" stylesheets="@style.css" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="2.0">
+               <graphic>
+                  <FontAwesomeIcon fill="WHITE" glyphName="CLOSE" size="1.2em" />
+               </graphic>
+            </Button>
+            <Button fx:id="minimize" layoutX="880.0" layoutY="2.0" mnemonicParsing="false" onAction="#minimize" prefHeight="24.0" prefWidth="52.0" styleClass="minimize" stylesheets="@style.css" AnchorPane.rightAnchor="54.0" AnchorPane.topAnchor="2.0">
+               <graphic>
+                  <FontAwesomeIcon fill="WHITE" glyphName="MINUS" size="1.2em" />
+               </graphic>
+            </Button>
+            <Button layoutX="14.0" layoutY="15.0" mnemonicParsing="false" onAction="#goBack" styleClass="loginBtn" stylesheets="@style.css" text="Logout" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#573a0c87" height="39.0" layoutX="91.0" layoutY="11.0" stroke="#a18e8e" strokeType="INSIDE" width="269.0">
+               <effect>
+                  <Blend />
+               </effect></Rectangle>
+            <Label fx:id="userTag" layoutX="97.0" layoutY="18.0" text="User: " textFill="WHITE">
+               <font>
+                  <Font name="SansSerif Regular" size="20.0" />
+               </font>
+               <effect>
+                  <Blend>
+                     <topInput>
+                        <SepiaTone />
+                     </topInput>
+                  </Blend>
+               </effect>
+            </Label>
+         </children>
+      </AnchorPane>
+   </top>
+   <left>
+      <AnchorPane prefHeight="541.0" prefWidth="313.0" styleClass="mainlogin" stylesheets="@style.css" BorderPane.alignment="CENTER">
+         <children>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#e1f1ff" height="232.0" layoutX="57.0" layoutY="27.0" stroke="BLACK" strokeType="INSIDE" width="200.0" />
+            <ImageView fx:id="imageDisplay" fitHeight="233.0" fitWidth="200.0" layoutX="57.0" layoutY="27.0" pickOnBounds="true" />
+            <Button fx:id="checkoutBtn" layoutX="36.0" layoutY="565.0" mnemonicParsing="false" onAction="#checkoutItem" prefHeight="27.0" prefWidth="114.0" text="Checkout" />
+            <Button layoutX="164.0" layoutY="565.0" mnemonicParsing="false" onAction="#returnItem" prefHeight="27.0" prefWidth="114.0" text="Return" />
+            <Button layoutX="77.0" layoutY="634.0" mnemonicParsing="false" onAction="#showPreviousCheckouts" prefHeight="27.0" prefWidth="160.0" text="View Previous Checkouts" />
+            <Button layoutX="77.0" layoutY="600.0" mnemonicParsing="false" onAction="#showHolders" prefHeight="27.0" prefWidth="160.0" text="View Current Holds" />
+         </children>
+      </AnchorPane>
+   </left>
+   <center>
+      <AnchorPane prefHeight="534.0" prefWidth="844.0" BorderPane.alignment="CENTER">
+         <children>
+            <TabPane prefHeight="668.0" prefWidth="787.0" tabClosingPolicy="UNAVAILABLE">
+               <tabs>
+                  <Tab text="Books">
+                     <content>
+                        <TableView fx:id="bookTable" onMouseClicked="#getItem" prefHeight="573.0" prefWidth="690.0">
+                           <columns>
+                              <TableColumn fx:id="bookName" editable="false" prefWidth="209.0" text="Book Name" />
+                              <TableColumn fx:id="bookAuthor" editable="false" prefWidth="106.0" text="Author" />
+                              <TableColumn fx:id="bookPages" editable="false" prefWidth="58.0" text="Pages" />
+                              <TableColumn fx:id="bookSummary" editable="false" prefWidth="276.0" text="Summary" />
+                              <TableColumn fx:id="bookCheckout" prefWidth="138.0" text="Current Checkout User" />
+                           </columns>
+                        </TableView>
+                     </content>
+                  </Tab>
+                  <Tab text="Games">
+                     <content>
+                        <TableView fx:id="gameTable" onMouseClicked="#getItem" prefHeight="200.0" prefWidth="200.0">
+                           <columns>
+                              <TableColumn fx:id="gameName" editable="false" prefWidth="209.0" text="Game Name" />
+                              <TableColumn fx:id="gameDeveloper" editable="false" prefWidth="142.0" text="Developer" />
+                              <TableColumn fx:id="gameYear" editable="false" prefWidth="88.0" text="Year Released" />
+                              <TableColumn fx:id="gameSummary" editable="false" prefWidth="211.0" text="Summary" />
+                              <TableColumn fx:id="gameCheckout" prefWidth="137.0" text="Current Checkout User" />
+                           </columns>
+                        </TableView>
+                     </content>
+                  </Tab>
+                  <Tab text="Items Checked Out">
+                     <content>
+                        <TableView fx:id="checkoutTable" onMouseClicked="#getItem" prefHeight="491.0" prefWidth="825.0">
+                           <columns>
+                              <TableColumn fx:id="itemCheckoutName" editable="false" prefWidth="212.0" text="Name" />
+                              <TableColumn fx:id="itemCheckoutType" editable="false" prefWidth="143.0" text="Item Type" />
+                              <TableColumn fx:id="itemDateCheckout" editable="false" prefWidth="234.0" text="Date Checked out" />
+                              <TableColumn fx:id="itemReturnDate" editable="false" prefWidth="198.0" text="Return Date" />
+                           </columns>
+                        </TableView>
+                     </content>
+                  </Tab>
+               </tabs>
+            </TabPane>
+         </children>
+      </AnchorPane>
+   </center>
+</BorderPane>
