@@ -59,8 +59,10 @@ public class previousCheckoutController implements Initializable {
     }
     public void refreshTable(Item item){
         if(item.getName().equals(client.getCurrentCheckoutName())) {
+            client.setPreviousNames(FXCollections.observableArrayList(item.getPrevious().split(", ")));
+            client.setPreviousDates(FXCollections.observableArrayList(item.getPreviousDates().split(", ")));
             ObservableList<ObservableList<String>> data = FXCollections.observableArrayList();
-            for(int i = 0; i < client.getPreviousDates().size(); i++){
+            for(int i = 0; i < item.getPreviousDates().split(", ").length; i++){
                 ObservableList<String> row = FXCollections.observableArrayList();
                 row.addAll(client.getPreviousNames().get(i), client.getPreviousDates().get(i));
                 data.add(row);

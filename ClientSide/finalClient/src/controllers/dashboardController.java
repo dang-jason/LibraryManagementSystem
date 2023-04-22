@@ -424,8 +424,8 @@ public class dashboardController implements Initializable {
         Item item;
         if(bookTable.getSelectionModel().getSelectedItem() != null){
             item = bookTable.getSelectionModel().getSelectedItem();
-        }else if(bookTable.getSelectionModel().getSelectedItem() != null){
-            item = bookTable.getSelectionModel().getSelectedItem();
+        }else if(gameTable.getSelectionModel().getSelectedItem() != null){
+            item = gameTable.getSelectionModel().getSelectedItem();
         } else{
             item = checkoutTable.getSelectionModel().getSelectedItem();
         }
