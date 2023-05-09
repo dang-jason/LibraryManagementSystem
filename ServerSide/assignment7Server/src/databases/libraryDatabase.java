@@ -33,7 +33,7 @@ public class libraryDatabase {
     private static MongoClient mongo;
     private static MongoDatabase database;
     private static MongoCollection<Document> collection;
-    private static final String URI = "mongodb+srv://jd52753:422cassignment7@library.b1aiqgy.mongodb.net/?retryWrites=true&w=majority";
+    private static final String URI = "MONGODBSERVER"; //REPLACE THIS WITH DATABASE
     private static final String DB = "library"; // test
     private static final String COLLECTION = "products"; // test
     public static void connectDatabase(){
